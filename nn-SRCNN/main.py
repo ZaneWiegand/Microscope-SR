@@ -6,7 +6,3 @@ import tifffile as tf
 import matplotlib.pyplot as plt
 print('Ready!')
 # %%
-print('OK!')
-print('OK!')
-print('OK!')
-print('OK!')
