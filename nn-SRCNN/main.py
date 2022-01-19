@@ -7,3 +7,4 @@ import matplotlib.pyplot as plt
 print('Ready!')
 # %%
 print('OK!')
+print('Ready for pytorch')
