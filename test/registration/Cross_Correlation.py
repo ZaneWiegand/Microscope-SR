@@ -60,6 +60,3 @@ print(f'Detected pixel offset (y, x): {shift}')
 reg_image = fourier_shift(np.fft.fftn(offset_image.real), shift)
 reg_image = np.fft.ifftn(reg_image)
 plt.imshow(reg_image.real, cmap='gray')
-# %%
-cv.imwrite('wrap_CrossCorrelation.jpg', transform(reg_image))
-# %%

@@ -22,13 +22,15 @@ v_ = v[::step, ::step]
 # %%
 norm = np.sqrt(u ** 2 + v ** 2)
 plt.imshow(norm)
-plt.quiver(x, y, u_, v_, color="r", units="dots", angles="xy", scale_units="xy")
+plt.quiver(x, y, u_, v_, color="r", units="dots",
+           angles="xy", scale_units="xy")
 plt.title("Optical flow magnitude and vector field")
 plt.axis("off")
 plt.show()
 # %%
 nr, nc = new.shape
-row_coords, col_coords = np.meshgrid(np.arange(nr), np.arange(nc), indexing="ij")
+row_coords, col_coords = np.meshgrid(
+    np.arange(nr), np.arange(nc), indexing="ij")
 image_warp = warp(new, np.array([row_coords + v, col_coords + u]), mode="edge")
 # %%
 # build an RGB image with the unregistered sequence
@@ -58,6 +60,5 @@ def transform(img):
 
 
 # %%
-tf.imwrite("wrap_OpticalFlow.tif", transform(image_warp))
-# plt.imsave('wrap.jpg',image_warp)
+plt.imshow(transform(image_warp))
 # %%

@@ -341,7 +341,4 @@ for i in range(5):
 # %%
 compare_unreg_reg(new, target, warp_img, True)
 # %%
-tf.imwrite("good.tif", transform(warp_img))
-# %%
 print(rmax_shift, cmax_shift)
-# %%
