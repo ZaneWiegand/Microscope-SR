@@ -6,4 +6,7 @@ import tifffile as tf
 import matplotlib.pyplot as plt
 print('Ready!')
 # %%
-print('Loading!')
+im = tf.imread('../Data/10x/10x1.tif')
+plt.imshow(im)
+
+# %%
