@@ -11,5 +11,4 @@ plt.imshow(im)
 # %%
 im = tf.imread('../Data/20x/20x1.tif')
 plt.imshow(im)
-
 # %%
