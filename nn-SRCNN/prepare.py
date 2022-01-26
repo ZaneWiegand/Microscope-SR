@@ -1,4 +1,5 @@
 # %%
+import matplotlib.pyplot as plt
 import glob
 import h5py
 import numpy as np
@@ -73,5 +74,3 @@ if __name__ == '__main__':
     args_eval = Para_eval()
     train(args_train)
     eval(args_eval)
-
-# %%
