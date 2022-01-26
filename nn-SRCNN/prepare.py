@@ -14,7 +14,7 @@ def train(args):
 
     for image_path in sorted(glob.glob('{}/*'.format(args.hr_images_dir))):
         hr = tf.imread(image_path)
-        hr = np.array(hr).astype(np.float32)
+        hr = np.array(hr).astype(np.uint8)
         for i in range(0, hr.shape[0] - args.patch_size + 1, args.stride):
             for j in range(0, hr.shape[1] - args.patch_size + 1, args.stride):
                 hr_patches.append(
@@ -22,7 +22,7 @@ def train(args):
 
     for image_path in sorted(glob.glob('{}/*'.format(args.lr_images_dir))):
         lr = tf.imread(image_path)
-        lr = np.array(lr).astype(np.float32)
+        lr = np.array(lr).astype(np.uint8)
         for i in range(0, lr.shape[0] - args.patch_size + 1, args.stride):
             for j in range(0, lr.shape[1] - args.patch_size + 1, args.stride):
                 lr_patches.append(
@@ -43,11 +43,11 @@ def eval(args):
     hr_group = h5_file.create_group('hr')
     for i, image_path in enumerate(sorted(glob.glob('{}/*'.format(args.hr_images_dir)))):
         hr = tf.imread(image_path)
-        hr = np.array(hr).astype(np.float32)
+        hr = np.array(hr).astype(np.uint8)
         hr_group.create_dataset(str(i), data=hr)
     for i, image_path in enumerate(sorted(glob.glob('{}/*'.format(args.lr_images_dir)))):
         lr = tf.imread(image_path)
-        lr = np.array(lr).astype(np.float32)
+        lr = np.array(lr).astype(np.uint8)
         lr_group.create_dataset(str(i), data=lr)
     h5_file.close()
 # %%
@@ -58,12 +58,12 @@ class Para_train(object):
     hr_images_dir = '../Data/20x_train'
     output_path = 'train.h5'
     patch_size = 50
-    stride = 10
+    stride = 40
 
 
 class Para_eval(object):
     lr_images_dir = '../Data/10x_eval'
-    hr_images_dir = '../Data/10x_eval'
+    hr_images_dir = '../Data/20x_eval'
     output_path = 'eval.h5'
 
 
