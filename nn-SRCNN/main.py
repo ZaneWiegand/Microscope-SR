@@ -1,6 +1,7 @@
 # %%
 import torch
 import torch.backends.cudnn as cudnn
+from models import SRCNN
 print('Ready!')
 # %%
 
