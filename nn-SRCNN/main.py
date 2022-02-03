@@ -4,7 +4,8 @@ from torch import nn
 import torch.backends.cudnn as cudnn
 import torch.optim as optim
 from models import SRCNN
-from datasets import TrainDataset, Evadataset
+from datasets import TrainDataset, EvalDataset
+from torch.utils.data.dataloader import DataLoader
 print('Ready!')
 # %%
 
@@ -35,3 +36,4 @@ optimizer = optim.Adam([{'params': model.conv1.parameters()},
                        lr=args.lr)
 # %%
 train_dataset = TrainDataset(args.train_file)
+train_dataloader = DataLoader(args.)
