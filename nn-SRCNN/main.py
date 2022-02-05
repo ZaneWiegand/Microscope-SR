@@ -6,6 +6,7 @@ import torch.optim as optim
 from models import SRCNN
 from datasets import TrainDataset, EvalDataset
 from torch.utils.data.dataloader import DataLoader
+from utils import AverageMeter
 print('Ready!')
 # %%
 
@@ -36,4 +37,17 @@ optimizer = optim.Adam([{'params': model.conv1.parameters()},
                        lr=args.lr)
 # %%
 train_dataset = TrainDataset(args.train_file)
-train_dataloader = DataLoader(args.)
+train_dataloader = DataLoader(dataset=train_dataset,
+                              batch_size=args.batch_size,
+                              shuffle=True,
+                              num_workers=args.num_workers,
+                              pin_memory=True,
+                              drop_last=False)
+eval_dataset = EvalDataset(args.eval_file)
+eval_dataloader = DataLoader(dataset=eval_dataset, batch_size=1)
+best_epoch = 0
+best_psnr = 0.0
+# %%
+for epoch in range(args.num_epochs):
+    model.train()
+    epoch_losses = AverageMeter()
