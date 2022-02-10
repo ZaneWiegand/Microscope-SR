@@ -7,6 +7,7 @@ from models import SRCNN
 from datasets import TrainDataset, EvalDataset
 from torch.utils.data.dataloader import DataLoader
 from utils import AverageMeter
+from tqdm import tqdm
 print('Ready!')
 # %%
 
@@ -51,3 +52,22 @@ best_psnr = 0.0
 for epoch in range(args.num_epochs):
     model.train()
     epoch_losses = AverageMeter()
+
+    with tqdm(total=len(train_dataset)-len(train_dataset) % args.batch_size) as t:
+        for data in train_dataloader:
+            inputs, labels = data
+
+            inputs = inputs.to(device)
+            labels = labels.to(device)
+
+            preds = model(inputs)
+
+            loss = criterion(preds, labels)
+            epoch_losses.update(loss.item, len(inputs))
+
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+            t.set_description(loss='{:.6f}'.format(epoch_losses.avg))
+            t.update(len(inputs))
