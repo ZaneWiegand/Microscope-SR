@@ -1,6 +1,7 @@
 # %%
 import os
 import torch
+import copy
 from torch import nn
 import torch.backends.cudnn as cudnn
 import torch.optim as optim
@@ -91,3 +92,11 @@ for epoch in range(args.num_epochs):
 
         epoch_psnr.update(calc_psnr(preds, labels), len(inputs))
     print('eval psnr: {:.2f}'.format(epoch_psnr.avg))
+
+    if epoch_psnr.avg > best_psnr:
+        best_epoch = epoch
+        best_psnr = epoch_psnr.avg
+        best_weights = copy.deepcopy(model.state_dict())
+# %%
+print('best epoch: {}, psnr: {:2f}'.format(best_epoch, best_psnr))
+torch.save(best_weights, os.path.join(args.output_dir, 'best.pth'))
