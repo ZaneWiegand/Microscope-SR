@@ -17,7 +17,7 @@ print('Ready!')
 class Para(object):
     train_file = '/Users/zanewiegand/代码/python/Microscope-Super-Resolution/nn-SRCNN/train.h5'  # str
     eval_file = '/Users/zanewiegand/代码/python/Microscope-Super-Resolution/nn-SRCNN/eval.h5'  # str
-    output_dir = '/Users/zanewiegand/代码/python/Microscope-Super-Resolution/nn-SRCNN'  # str
+    output_dir = '/Users/zanewiegand/代码/python/Microscope-Super-Resolution/nn-SRCNN/output'  # str
     lr = 1e-4  # float
     batch_size = 20  # int
     num_epochs = 100  # int
