@@ -13,6 +13,7 @@ class TrainDataset(Dataset):
     def __getitem__(self, idx):
         with h5py.File(self.h5_file, 'r') as f:
             # Return input data, output label
+            # the data range is [0, 1]
             return np.expand_dims(f['lr'][idx]/255., 0), np.expand_dims(f['hr'][idx]/255., 0)
 
     def __len__(self):

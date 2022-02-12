@@ -1,4 +1,5 @@
 # %%
+import os
 import torch
 from torch import nn
 import torch.backends.cudnn as cudnn
@@ -6,7 +7,7 @@ import torch.optim as optim
 from models import SRCNN
 from datasets import TrainDataset, EvalDataset
 from torch.utils.data.dataloader import DataLoader
-from utils import AverageMeter
+from utils import AverageMeter, calc_psnr
 from tqdm import tqdm
 print('Ready!')
 # %%
@@ -15,7 +16,7 @@ print('Ready!')
 class Para(object):
     train_file = '/Users/zanewiegand/代码/python/Microscope-Super-Resolution/nn-SRCNN/train.h5'  # str
     eval_file = '/Users/zanewiegand/代码/python/Microscope-Super-Resolution/nn-SRCNN/eval.h5'  # str
-    outputs_dir = '/Users/zanewiegand/代码/python/Microscope-Super-Resolution/nn-SRCNN'  # str
+    output_dir = '/Users/zanewiegand/代码/python/Microscope-Super-Resolution/nn-SRCNN'  # str
     lr = 1e-4  # float
     batch_size = 20  # int
     num_epochs = 100  # int
@@ -71,3 +72,22 @@ for epoch in range(args.num_epochs):
 
             t.set_description(loss='{:.6f}'.format(epoch_losses.avg))
             t.update(len(inputs))
+
+    # Save current n parameters
+    torch.save(model.state_dict(), os.path.join(
+        args.output_dir, 'epoch_{}.pth'.format(epoch)))
+
+    model.eval()
+    epoch_psnr = AverageMeter()
+
+    for data in eval_dataloader:
+        inputs, labels = data
+
+        inputs = inputs.to(device)
+        labels = labels.to(device)
+
+        with torch.no_grad():
+            preds = model(inputs).clamp(0.0, 1.0)
+
+        epoch_psnr.update(calc_psnr(preds, labels), len(inputs))
+    print('eval psnr: {:.2f}'.format(epoch_psnr.avg))
