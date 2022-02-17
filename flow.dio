@@ -1,25 +1,25 @@
 <mxfile host="65bd71144e">
     <diagram id="yFkfcF8aqrtWNPGqwHom" name="Page-1">
-        <mxGraphModel dx="678" dy="680" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+        <mxGraphModel dx="178" dy="680" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="7" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;" parent="1" vertex="1">
+                <mxCell id="7" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=none;" parent="1" vertex="1">
                     <mxGeometry x="300" y="60" width="480" height="100" as="geometry"/>
                 </mxCell>
                 <mxCell id="4" value="" style="edgeStyle=none;html=1;strokeColor=#000000;" parent="1" source="2" target="3" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="2" value="&lt;font color=&quot;#000000&quot;&gt;光学图像配准&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;" parent="1" vertex="1">
+                <mxCell id="2" value="&lt;font color=&quot;#000000&quot; style=&quot;font-size: 15px&quot;&gt;光学图像配准&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;" parent="1" vertex="1">
                     <mxGeometry x="320" y="80" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="6" value="" style="edgeStyle=none;html=1;strokeColor=#000000;" parent="1" source="3" target="5" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="3" value="&lt;font color=&quot;#000000&quot;&gt;编写及训练神经网络&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;" parent="1" vertex="1">
+                <mxCell id="3" value="&lt;font color=&quot;#000000&quot; style=&quot;font-size: 15px&quot;&gt;编写及训练&lt;br&gt;神经网络&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;" parent="1" vertex="1">
                     <mxGeometry x="480" y="80" width="120" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="5" value="&lt;font color=&quot;#000000&quot;&gt;评估网络性能&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;" parent="1" vertex="1">
+                <mxCell id="5" value="&lt;font color=&quot;#000000&quot; style=&quot;font-size: 15px;&quot;&gt;评估网络性能&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#000000;fontSize=15;" parent="1" vertex="1">
                     <mxGeometry x="640" y="80" width="120" height="60" as="geometry"/>
                 </mxCell>
             </root>
