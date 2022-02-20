@@ -15,7 +15,7 @@ def train(args):
 
     for image_path in sorted(glob.glob('{}/*'.format(args.hr_images_dir))):
         hr = tf.imread(image_path)
-        hr = np.array(hr).astype(np.uint8)
+        hr = np.array(hr).astype(np.float32)  # ! Must float!
         for i in range(0, hr.shape[0] - args.patch_size + 1, args.stride):
             for j in range(0, hr.shape[1] - args.patch_size + 1, args.stride):
                 hr_patches.append(
@@ -23,7 +23,7 @@ def train(args):
 
     for image_path in sorted(glob.glob('{}/*'.format(args.lr_images_dir))):
         lr = tf.imread(image_path)
-        lr = np.array(lr).astype(np.uint8)
+        lr = np.array(lr).astype(np.float32)  # ! Must float!
         for i in range(0, lr.shape[0] - args.patch_size + 1, args.stride):
             for j in range(0, lr.shape[1] - args.patch_size + 1, args.stride):
                 lr_patches.append(
@@ -44,11 +44,11 @@ def eval(args):
     hr_group = h5_file.create_group('hr')
     for i, image_path in enumerate(sorted(glob.glob('{}/*'.format(args.hr_images_dir)))):
         hr = tf.imread(image_path)
-        hr = np.array(hr).astype(np.uint8)
+        hr = np.array(hr).astype(np.float32)  # ! Must float!
         hr_group.create_dataset(str(i), data=hr)
     for i, image_path in enumerate(sorted(glob.glob('{}/*'.format(args.lr_images_dir)))):
         lr = tf.imread(image_path)
-        lr = np.array(lr).astype(np.uint8)
+        lr = np.array(lr).astype(np.float32)  # ! Must float!
         lr_group.create_dataset(str(i), data=lr)
     h5_file.close()
 # %%
@@ -74,3 +74,5 @@ if __name__ == '__main__':
     args_eval = Para_eval()
     train(args_train)
     eval(args_eval)
+
+# %%
