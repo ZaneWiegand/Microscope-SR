@@ -41,5 +41,6 @@ with torch.no_grad():
 psnr = calc_psnr(input_img, preds)
 print('PSNR: {:.2f}'.format(psnr))
 # %%
-preds = preds.mul(255.0).cpu().numpy().squeeze(0).squeeze(0)  # ? reason
+preds = preds.mul(255.0).cpu().numpy().squeeze(
+    0).squeeze(0).astype(np.uint8)  # ? reason
 tf.imsave(arg.output_file, preds)
