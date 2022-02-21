@@ -22,7 +22,7 @@ if __name__ == '__main__':  # ! Must have this
         lr = 1e-4  # float
         batch_size = 20  # int
         num_epochs = 100  # int
-        num_workers = 8  # int
+        num_workers = 1  # int
         seed = 123  # int
 
     # %%
