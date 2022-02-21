@@ -19,8 +19,8 @@ number = 2
 plus = 10
 # %%
 for i in range(number):
-    img10x = tf.imread(f'../Data/10x_origin/10x{i+1+plus}.tif')
-    img20x = tf.imread(f'../Data/20x_origin/20x{i+1+plus}.tif')
+    img10x = tf.imread(f'../Data-Pre-upsample/10x_origin/10x{i+1+plus}.tif')
+    img20x = tf.imread(f'../Data-Pre-upsample/20x_origin/20x{i+1+plus}.tif')
     img10x = img10x[60:-60, 80:-80]
     img20x = img20x[60:-60, 80:-80]
     if flag:
@@ -28,7 +28,7 @@ for i in range(number):
         thresh20x, _ = cv.threshold(img20x, 0, 255, cv.THRESH_OTSU)
         img10x = preprocess(img10x, thresh10x)
         img20x = preprocess(img20x, thresh20x)
-    tf.imwrite(f'../Data/10x_predict/10x{i+plus+1}.tif', img10x)
-    tf.imwrite(f'../Data/20x_predict/20x{i+plus+1}.tif', img20x)
+    tf.imwrite(f'../Data-Pre-upsample/10x_predict/10x{i+plus+1}.tif', img10x)
+    tf.imwrite(f'../Data-Pre-upsample/20x_predict/20x{i+plus+1}.tif', img20x)
 
 # %%
