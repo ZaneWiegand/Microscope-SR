@@ -28,7 +28,7 @@ for i in range(number):
         thresh20x, _ = cv.threshold(img20x, 0, 255, cv.THRESH_OTSU)
         img10x = preprocess(img10x, thresh10x)
         img20x = preprocess(img20x, thresh20x)
-    tf.imwrite(f'../Data/10x_predict/10x{i+plus}.tif', img10x)
-    tf.imwrite(f'../Data/20x_predict/20x{i+plus}.tif', img20x)
+    tf.imwrite(f'../Data/10x_predict/10x{i+plus+1}.tif', img10x)
+    tf.imwrite(f'../Data/20x_predict/20x{i+plus+1}.tif', img20x)
 
 # %%
