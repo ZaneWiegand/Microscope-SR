@@ -29,7 +29,7 @@ matches = bf.knnMatch(des1, des2, k=2)
 # %%
 good_matches = []
 for m, n in matches:
-    if m.distance < 0.75 * n.distance:
+    if m.distance < 0.3 * n.distance:
         good_matches.append([m])
 # %%
 img = cv.drawMatchesKnn(
