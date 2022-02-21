@@ -562,12 +562,12 @@ def calculate_NCC(target, warp):
 #! 荧光主程序开始
 test_number = 11
 pic10x = tf.imread(
-    "./template_matching/10X/region{}.tif".format(
+    "./Raw-Data/10X/region{}.tif".format(
         test_number
     )
 )
 pic20x = tf.imread(
-    "./template_matching/20X/region{}.tif".format(
+    "./Raw-Data/20X/region{}.tif".format(
         test_number
     )
 )
@@ -700,17 +700,17 @@ elif method == cv.INTER_NEAREST:
 else:
     methods = "ERROR"
 tf.imwrite(
-    "./Test Result up/test{}_pic_10x_{}_{}_{}_{}_{}divide.tif".format(
+    "./Test-Result/test{}_pic_10x_{}_{}_{}_{}_{}divide.tif".format(
         test_number, pre_threshold, global_method, methods, threshold, k + 1
     ),
     warp_img.astype(np.uint8),
 )
 tf.imwrite(
-    "./Test Result up/test{}_pic10x.tif".format(test_number),
+    "./Test-Result/test{}_pic10x.tif".format(test_number),
     pic10x_ex_cut.astype(np.uint8),
 )
 tf.imwrite(
-    "./Test Result up/test{}_pic_20x.tif".format(
+    "./Test-Result/test{}_pic_20x.tif".format(
         test_number), pic20x.astype(np.uint8)
 )
 #! 荧光主程序结束
