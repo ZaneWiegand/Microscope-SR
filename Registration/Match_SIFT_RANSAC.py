@@ -8,6 +8,8 @@ import warnings
 warnings.filterwarnings("ignore")  # 忽略警告
 print("OK!")
 # %%
+
+
 def transform(img):
     img = img / img.max() * 255
     img = img.astype(np.uint8)
@@ -31,8 +33,8 @@ def create_image_block_stack(img, row, col):
     for r in range(row):
         for c in range(col):
             stack_img[r, c, :, :] = paddle_img[
-                r * blocksize_row : (r + 1) * blocksize_row,
-                c * blocksize_col : (c + 1) * blocksize_col,
+                r * blocksize_row: (r + 1) * blocksize_row,
+                c * blocksize_col: (c + 1) * blocksize_col,
             ]
 
     return stack_img.astype(np.uint8)
@@ -58,21 +60,21 @@ def stitch_block(stack_img, origin):
     for i in range(num_row):
         for j in range(num_col):
             full_img[
-                i * block_row : (i + 1) * block_row, j * block_col : (j + 1) * block_col
+                i * block_row: (i + 1) * block_row, j * block_col: (j + 1) * block_col
             ] = stack_img[i, j, :, :]
-    full_img = full_img[0 : origin.shape[0], 0 : origin.shape[1]]
+    full_img = full_img[0: origin.shape[0], 0: origin.shape[1]]
     return full_img
 
 
 # %%
 test_number = 2
 pic10x = tf.imread(
-    "/Users/zanewiegand/学习/毕业设计/毕业设计数据/荧光/template_matching/10X/region{}.tif".format(
+    "/Users/zanewiegand/代码/python/Microscope-Super-Resolution/Registration/Raw-Data/10X/region{}.tif".format(
         test_number
     )
 )
 pic20x = tf.imread(
-    "/Users/zanewiegand/学习/毕业设计/毕业设计数据/荧光/template_matching/20X/region{}.tif".format(
+    "/Users/zanewiegand/代码/python/Microscope-Super-Resolution/Registration/Raw-Data/20X/region{}.tif".format(
         test_number
     )
 )
@@ -94,11 +96,13 @@ t1 = min_loc
 pic20x_r, pic20x_c = pic20x.shape
 br = (t1[0] + pic20x_r, t1[1] + pic20x_c)
 pic10x_ex_cut = pic10x_ex[
-    min_loc[0] : min_loc[0] + pic20x_r, min_loc[1] : min_loc[1] + pic20x_c
+    min_loc[0]: min_loc[0] + pic20x_r, min_loc[1]: min_loc[1] + pic20x_c
 ]
 new = pic10x_ex_cut
 target = pic20x
 # %%
+
+
 def rigid_registration(obj_stack, ref_stack, target_all, flag=False):
     num_row, num_col, nr, nc = ref_stack.shape
     ans_stack = np.zeros_like(ref_stack)
@@ -162,6 +166,8 @@ plt.imshow(warp_img)
 plt.axis("off")
 plt.show()
 # %%
+
+
 def calculate_MSD(target, warp):
     warp = warp.astype(np.uint8)
     target = target.astype(np.uint8)
@@ -212,7 +218,8 @@ def calculate_NCC(target, warp):
     warp = warp.astype(np.uint8)
     target = target.astype(np.uint8)
     up = np.sum((target - np.mean(target)) * (warp - np.mean(warp)))
-    down1 = np.sqrt(np.sum((target - np.mean(target)) * (target - np.mean(target))))
+    down1 = np.sqrt(np.sum((target - np.mean(target))
+                    * (target - np.mean(target))))
     down2 = np.sqrt(np.sum((warp - np.mean(warp)) * (warp - np.mean(warp))))
     return up / (down1 * down2)
 
@@ -233,5 +240,3 @@ print(calculate_MSD(target, warp_img))
 plt.imshow(target - warp_img)
 # %%
 ans = target - warp_img
-# %%
-np.sum

@@ -8,12 +8,12 @@ print("OK!")
 # %%
 test_number = 11
 pic1 = tf.imread(
-    "./template_matching/10X/region{}.tif".format(
+    "./Raw-Data/10X/region{}.tif".format(
         test_number
     )
 )
 pic2 = tf.imread(
-    "./template_matching/20X/region{}.tif".format(
+    "./Raw-Data/20X/region{}.tif".format(
         test_number
     )
 )
