@@ -8,7 +8,7 @@ warnings.filterwarnings("ignore")  # 忽略警告
 print("OK!")
 # %%
 if __name__ == "__main__":
-    for pic_number in range(15):
+    for pic_number in np.arange(15):
         test_number = pic_number+1
         pic10x = tf.imread(
             "./Raw-Data/10X/region{}.tif".format(
@@ -22,13 +22,12 @@ if __name__ == "__main__":
         )
         pic10x = pic10x[:, :, 1]
         pic20x = pic20x[:, :, 1]
-        # %%
+
         # ? 合适阈值
         pre_threshold = 0
         pic10x = preprocess(pic10x, pre_threshold)
         pic20x = preprocess(pic20x, pre_threshold)
 
-        # %%
         # 插值pic1，变为原来的4倍
         pic10x_r, pic10x_c = pic10x.shape
         pic10x_ex = cv.resize(
@@ -43,21 +42,21 @@ if __name__ == "__main__":
         pic10x_ex_cut = pic10x_ex[
             min_loc[0]: min_loc[0] + pic20x_r, min_loc[1]: min_loc[1] + pic20x_c
         ]
-        # %%
+
         new = pic10x_ex_cut
         target = pic20x
-        # %%
+
         # * method = "SIFT","ORB","KAZE","AKAZE","BRISK","nCCM"
         global_method = "SIFT"
         warp_img = global_registration(new, target, global_method, True)
         first_warp_img = warp_img
-        # %%
+
         block_row_ini = block_row = 1
         block_col_ini = block_col = 1
         target_block_stack = create_image_block_stack(
             target, block_row, block_col)
         # display_blocks(target_block_stack)
-        # %%
+
         threshold = 0.25
         layer = 16
         layer_state = np.ones(layer)
@@ -68,7 +67,7 @@ if __name__ == "__main__":
         warp_img = warp_img.astype(np.float64)
         pic20x = pic20x.astype(np.float64)
         method = cv.INTER_LINEAR
-        # %%
+
         for i in range(layer):
             count = 0
             rtmap = np.zeros_like(target)
@@ -99,7 +98,7 @@ if __name__ == "__main__":
 
             target_block_stack = create_image_block_stack(
                 target, block_row, block_col)
-        # %%
+
         tup = [(i, layer_state[i]) for i in range(len(layer_state))]
         k = np.max([j for j, n in tup if n == 1])
         print("max layer: {}".format(k + 1))
@@ -116,7 +115,7 @@ if __name__ == "__main__":
                         ),
                     )
                 )
-        # %%
+
         if method == cv.INTER_CUBIC:
             methods = "CUBIC"
         elif method == cv.INTER_LINEAR:
