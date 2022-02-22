@@ -10,6 +10,7 @@ if __name__ == '__main__':
     weights_file = './weight_output/best.pth'
     plus = 11
     number = 2
+    # %%
     for pic_number in range(number):
         image_file = '../Data-Pre-upsample/10x_predict/10x{}.tif'.format(
             pic_number+plus)
