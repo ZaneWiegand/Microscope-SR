@@ -9,9 +9,9 @@ from utils import calc_psnr
 
 if __name__ == '__main__':
     class Para(object):
-        weights_file = './output/best.pth'
+        weights_file = './weight_output/best.pth'
         image_file = '../Data-Pre-upsample/10x_predict/10x11.tif'
-        output_file = './output/out.tif'
+        output_file = './pic_output/out.tif'
 
     # %%
     arg = Para()

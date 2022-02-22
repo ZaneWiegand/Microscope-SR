@@ -18,7 +18,7 @@ if __name__ == '__main__':  # ! Must have this
     class Para(object):
         train_file = 'train.h5'  # str
         eval_file = 'eval.h5'  # str
-        output_dir = 'output'  # str
+        output_dir = 'weight_output'  # str
         lr = 1e-4  # float
         batch_size = 20  # int
         num_epochs = 100  # int
