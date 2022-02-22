@@ -9,9 +9,11 @@ from utils import calc_psnr
 
 if __name__ == '__main__':
     class Para(object):
-        weights_file = ''
-        image_file = ''
-        output_file = ''
+        weights_file = 'D:/课程资料/python/Microscope-Super-Resolution/nn-SRCNN/output/best.pth'
+        image_file = 'D:/课程资料/python/Microscope-Super-Resolution\Data/10x_predict/10x11.tif'
+        output_file = 'D:/课程资料/python/Microscope-Super-Resolution/nn-SRCNN/output/out.tif'
+
+    # %%
     arg = Para()
     cudnn.benchmark = True
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
