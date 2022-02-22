@@ -102,6 +102,6 @@ if __name__ == '__main__':  # ! Must have this
             best_epoch = epoch
             best_psnr = epoch_psnr.avg
             best_weights = copy.deepcopy(model.state_dict())
-    # %%
-    print('best epoch: {}, psnr: {:2f}'.format(best_epoch, best_psnr))
-    torch.save(best_weights, os.path.join(args.output_dir, 'best.pth'))
+# %%
+print('best epoch: {}, psnr: {:2f}'.format(best_epoch, best_psnr))
+torch.save(best_weights, os.path.join(args.output_dir, 'best.pth'))
