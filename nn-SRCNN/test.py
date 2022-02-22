@@ -10,7 +10,7 @@ from utils import calc_psnr
 if __name__ == '__main__':
     class Para(object):
         weights_file = 'D:/课程资料/python/Microscope-Super-Resolution/nn-SRCNN/output/best.pth'
-        image_file = 'D:/课程资料/python/Microscope-Super-Resolution\Data/10x_predict/10x11.tif'
+        image_file = 'D:/课程资料/python/Microscope-Super-Resolution/Data-Pre-upsample/10x_predict/10x11.tif'
         output_file = 'D:/课程资料/python/Microscope-Super-Resolution/nn-SRCNN/output/out.tif'
 
     # %%
