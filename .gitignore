@@ -1,4 +1,4 @@
 nn-SRCNN/eval.h5
 nn-SRCNN/train.h5
-test/hdf5/91-image_x2.h5
-test/hdf5/Set5_x2.h5
+nn-VDSR/eval.h5
+nn-VDSR/train.h5
