@@ -10,14 +10,17 @@ from datasets import TrainDataset, EvalDataset
 from models import VDSR
 from utils import AverageMeter, calc_psnr
 from tqdm import tqdm
+
+import warnings
+warnings.filterwarnings("ignore")
 # %%
 if __name__ == '__main__':
     class Para(object):
         train_file = 'train.h5'
         eval_file = 'eval.h5'
         output_dir = './weight_output'
-        batch_size = 32  # Training batch size
-        num_epochs = 50  # Number of epochs to train for
+        batch_size = 20  # Training batch size
+        num_epochs = 30  # Number of epochs to train for
         lr = 0.1  # Learning rate
         clip = 0.4  # Clipping Gradients
         momentum = 0.9  # Momentum (for optimizer)
@@ -54,7 +57,7 @@ if __name__ == '__main__':
     best_psnr = 0.0
 
     for epoch in range(1, args.num_epochs+1):
-        lr = adjust_learning_rate(epoch-1)
+        lr = adjust_learning_rate(args, epoch-1)
         for param_group in optimizer.param_groups:
             param_group["lr"] = lr
 
@@ -63,7 +66,7 @@ if __name__ == '__main__':
 
         with tqdm(total=(len(train_dataset)-len(train_dataset) % args.batch_size)) as t:
             t.set_description(
-                'epoch: {}/{}, lr = {}'.format(epoch, args.num_epochs - 1, optimizer.param_groups[0]["lr"]))
+                'epoch: {}/{}, lr = {:.8f}'.format(epoch, args.num_epochs, optimizer.param_groups[0]["lr"]))
             for data in train_dataloader:
                 inputs, labels = data
 
@@ -72,17 +75,16 @@ if __name__ == '__main__':
 
                 preds = model(inputs)
                 loss = criterion(preds, labels)
+                epoch_losses.update(loss.item(), len(inputs))
 
                 optimizer.zero_grad()
                 loss.backward()
-                nn.utils.clip_grad_norm(model.parameters(), args.clip)
+                nn.utils.clip_grad_norm(
+                    model.parameters(), args.clip)  # gradient explosion
                 optimizer.step()
 
                 t.set_postfix(loss='{:.6f}'.format(epoch_losses.avg))
                 t.update(len(inputs))
-
-        torch.save(model.state_dict(), os.path.join(
-            args.output_dir, 'epoch_{}.pth'.format(epoch)))
 
         model.eval()
         epoch_psnr = AverageMeter()
@@ -100,10 +102,5 @@ if __name__ == '__main__':
 
         print('eval psnr: {:.2f}'.format(epoch_psnr.avg))
 
-        if epoch_psnr.avg > best_psnr:
-            best_epoch = epoch
-            best_psnr = epoch_psnr.avg
-            best_weights = copy.deepcopy(model.state_dict())
-# %%
-print('best epoch: {}, psnr: {:2f}'.format(best_epoch, best_psnr))
-torch.save(best_weights, os.path.join(args.output_dir, 'best.pth'))
+        torch.save(model.state_dict(), os.path.join(
+            args.output_dir, 'epoch_{}_lr_{:.8f}_psnr_{:.2f}.pth'.format(epoch, lr, epoch_psnr.avg)))

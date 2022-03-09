@@ -7,7 +7,7 @@ import numpy as np
 from utils import calc_psnr
 # %%
 if __name__ == '__main__':
-    weights_file = './weight_output/best.pth'
+    weights_file = './weight_output/epoch_18_lr_0.01000000_psnr_34.19.pth'
     plus = 11
     number = 2
     # %%
@@ -42,3 +42,5 @@ if __name__ == '__main__':
         preds = preds.mul(255.0).cpu().numpy().squeeze(
             0).squeeze(0).astype(np.uint8)  # ? reason
         tf.imsave('./pic_output/10x_out{}.tif'.format(pic_number+plus), preds)
+
+# %%
