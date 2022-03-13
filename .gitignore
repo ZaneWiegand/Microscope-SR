@@ -2,3 +2,5 @@ nn-SRCNN/eval.h5
 nn-SRCNN/train.h5
 nn-VDSR/eval.h5
 nn-VDSR/train.h5
+nn-SRGAN/eval.h5
+nn-SRGAN/train.h5

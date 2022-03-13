@@ -55,16 +55,16 @@ def eval(args):
 
 
 class Para_train(object):
-    lr_images_dir = '../Data-Pre-upsample/10x_train'
-    hr_images_dir = '../Data-Pre-upsample/20x_train'
+    lr_images_dir = '../Data-Post-upsample/10x_train'
+    hr_images_dir = '../Data-Post-upsample/20x_train'
     output_path = 'train.h5'
     patch_size = 50
     stride = 40
 
 
 class Para_eval(object):
-    lr_images_dir = '../Data-Pre-upsample/10x_eval'
-    hr_images_dir = '../Data-Pre-upsample/20x_eval'
+    lr_images_dir = '../Data-Post-upsample/10x_eval'
+    hr_images_dir = '../Data-Post-upsample/20x_eval'
     output_path = 'eval.h5'
 
 
