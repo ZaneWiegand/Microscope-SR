@@ -4,6 +4,7 @@ import torch.backends.cudnn as cudnn
 from models import SRCNN
 import tifffile as tf
 import numpy as np
+from torch import nn
 from utils import calc_psnr
 # %%
 if __name__ == '__main__':
