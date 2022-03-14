@@ -14,6 +14,7 @@ if __name__ == '__main__':
     class Para(object):
         train_file = 'train.h5'
         eval_file = 'eval.h5'
+        output_dir = './weight_output'
         upscale_factor = 2
         batch_size = 32
         num_epochs = 100
@@ -116,5 +117,27 @@ if __name__ == '__main__':
                 running_results['g_loss'] / running_results['batch_sizes'],
                 running_results['d_score'] / running_results['batch_sizes'],
                 running_results['g_score'] / running_results['batch_sizes']))
+
+        netG.eval()
+
+        with torch.no_grad():
+            eval_bar = tqdm(eval_dataloader)
+            evaling_results = {'mse': 0, 'ssims': 0,
+                               'psnr': 0, 'ssim': 0,
+                               'batch_sizes': 0}
+
+            for data, target in eval_bar:
+                batch_size = data.size(0)
+                evaling_results['batch_sizes'] += batch_size
+
+                lr = data
+                hr = target
+
+                if torch.cuda.is_available():
+                    lr = lr.cuda()
+                    hr = hr.cuda()
+
+                sr = netG(lr)
+
 
 # %%
