@@ -16,18 +16,18 @@ def train(args):
     for image_path in sorted(glob.glob('{}/*'.format(args.hr_images_dir))):
         hr = tf.imread(image_path)
         hr = np.array(hr).astype(np.float32)  # ! Must float!
-        for i in range(0, hr.shape[0] - args.patch_size + 1, args.stride):
-            for j in range(0, hr.shape[1] - args.patch_size + 1, args.stride):
+        for i in range(0, hr.shape[0] - args.hr_patch_size + 1, args.hr_stride):
+            for j in range(0, hr.shape[1] - args.hr_patch_size + 1, args.hr_stride):
                 hr_patches.append(
-                    hr[i:i + args.patch_size, j:j + args.patch_size])
+                    hr[i:i + args.hr_patch_size, j:j + args.hr_patch_size])
 
     for image_path in sorted(glob.glob('{}/*'.format(args.lr_images_dir))):
         lr = tf.imread(image_path)
         lr = np.array(lr).astype(np.float32)  # ! Must float!
-        for i in range(0, lr.shape[0] - args.patch_size + 1, args.stride):
-            for j in range(0, lr.shape[1] - args.patch_size + 1, args.stride):
+        for i in range(0, lr.shape[0] - args.lr_patch_size + 1, args.lr_stride):
+            for j in range(0, lr.shape[1] - args.lr_patch_size + 1, args.lr_stride):
                 lr_patches.append(
-                    lr[i:i + args.patch_size, j:j + args.patch_size])
+                    lr[i:i + args.lr_patch_size, j:j + args.lr_patch_size])
 
     lr_patches = np.array(lr_patches)
     hr_patches = np.array(hr_patches)
@@ -58,8 +58,10 @@ class Para_train(object):
     lr_images_dir = '../Data-Post-upsample/10x_train'
     hr_images_dir = '../Data-Post-upsample/20x_train'
     output_path = 'train.h5'
-    patch_size = 50
-    stride = 40
+    hr_patch_size = 50
+    lr_patch_size = hr_patch_size//2
+    hr_stride = 50
+    lr_stride = hr_stride//2
 
 
 class Para_eval(object):
