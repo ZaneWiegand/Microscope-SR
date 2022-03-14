@@ -1,4 +1,5 @@
 # %%
+import os
 import torch
 import torch.backends.cudnn as cudnn
 from datasets import TrainDataset, EvalDataset
@@ -8,7 +9,9 @@ from tqdm import tqdm
 from loss import GeneratorLoss
 import torch.optim as optim
 from torch.autograd import Variable
-
+from utils import ssim
+from math import log10
+import pandas as pd
 # %%
 if __name__ == '__main__':
     class Para(object):
@@ -136,8 +139,52 @@ if __name__ == '__main__':
                 if torch.cuda.is_available():
                     lr = lr.cuda()
                     hr = hr.cuda()
-
                 sr = netG(lr)
 
+                batch_mse = ((sr-hr)**2).mean()
+                evaling_results['mse'] += batch_mse*batch_size
+                batch_ssim = ssim(sr, hr)
+                evaling_results['ssims'] += batch_ssim*batch_size
+                evaling_results['psnr'] = 10*log10(hr.max()**2/(
+                    evaling_results['mse']/evaling_results['batch_sizes']))
+                evaling_results['ssim'] = evaling_results['ssims'] / \
+                    evaling_results['batch_sizes']
+                eval_bar.set_description(
+                    desc='[converting LR images to SR images] PSNR: %.4f dB SSIM: %.4f'
+                    % (evaling_results['psnr'], evaling_results['ssim'])
+                )
 
-# %%
+        # save model parameters
+        torch.save(netG.state_dict(), os.path.join(
+            args.output_dir, 'netG_epoch_{}_{}.pth'.format(
+                args.upscale_factor, epoch)))
+
+        torch.save(netD.state_dict(), os.path.join(
+            args.output_dir, 'netD_epoch_{}_{}.pth'.format(
+                args.upscale_factor, epoch)))
+
+        # save loss\scores\psnr\ssim
+        results['d_loss'].append(
+            running_results['d_loss']/running_results['batch_sizes'])
+        results['g_loss'].append(
+            running_results['g_loss']/running_results['batch_sizes'])
+        results['d_score'].append(
+            running_results['d_score']/running_results['batch_sizes'])
+        results['g_score'].append(
+            running_results['g_score']/running_results['batch_sizes'])
+        results['psnr'].append(evaling_results['psnr'])
+        results['ssim'].append(evaling_results['ssim'])
+
+        if epoch % 10 == 0 and epoch != 0:
+            data_frame = pd.DataFrame(
+                data={
+                    'Loss_D': results['d_loss'],
+                    'Loss_G': results['g_loss'],
+                    'Score_D': results['d_score'],
+                    'Score_G': results['g_sclre'],
+                    'PSNR': results['psnr'],
+                    'SSIM': results['ssim']
+                }, index=range(1, epoch+1)
+            )
+            data_frame.to_csv(args.output_dir+'srf_'+str(args.upscale_factor) +
+                              '_train_results.csv', index_label='Epoch')
