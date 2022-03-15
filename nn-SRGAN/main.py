@@ -25,6 +25,7 @@ if __name__ == '__main__':
         num_epochs = 100
         num_workers = 0
         seed = 123
+        eval_original_flag = True
 
     args = Para()
     cudnn.benchmark = True
@@ -43,7 +44,7 @@ if __name__ == '__main__':
         dataset=eval_dataset,
         num_workers=args.num_workers,
         batch_size=1,
-        shuffle=True)
+        shuffle=False)
 
     netG = Generator(args.upscale_factor)
     print('# generator parameters:', sum(param.numel()
@@ -124,6 +125,7 @@ if __name__ == '__main__':
 
         with torch.no_grad():
             eval_images = []
+            hr_images = []
             eval_bar = tqdm(eval_dataloader)
             evaling_results = {'mse': 0, 'ssims': 0,
                                'psnr': 0, 'ssim': 0,
@@ -149,16 +151,22 @@ if __name__ == '__main__':
                     desc='[converting LR images to SR images] PSNR: %.4f dB SSIM: %.4f'
                     % (evaling_results['psnr'], evaling_results['ssim'])
                 )
-                eval_images.extend([sr.squeeze(0).squeeze(0),
-                                   hr.squeeze(0).squeeze(0)])
+                eval_images.extend(sr.squeeze(0))
+                if args.eval_original_flag:
+                    hr_images.extend(hr.squeeze(0))
+
+            if args.eval_original_flag:
+                hr_images = torch.stack(hr_images)
+                hr_images = utils.make_grid(hr_images, nrow=6, padding=0)
+                utils.save_image(hr_images,
+                                 os.path.join(args.out_pic_dir, 'original_hr.png'))
+                args.eval_original_flag = False
+
             eval_images = torch.stack(eval_images)
-            eval_save_bar = tqdm(eval_images, desc='[saving training results]')
-            index = 1
-            for image in eval_save_bar:
-                image = utils.make_grid(image, nrow=2, padding=5)
-                utils.save_image(
-                    image, os.path.join(args.out_pic_dir + 'epoch_%d_index_%d.png' % (epoch, index)), padding=5)
-                index += 1
+            eval_images = utils.make_grid(eval_images, nrow=6, padding=0)
+            utils.save_image(
+                eval_images, os.path.join(args.out_pic_dir,
+                                          'scale_{}_epoch_{}.png'.format(args.upscale_factor, epoch)))
 
         # save model parameters
         torch.save(netG.state_dict(), os.path.join(
