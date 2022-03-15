@@ -151,18 +151,20 @@ if __name__ == '__main__':
                     desc='[converting LR images to SR images] PSNR: %.4f dB SSIM: %.4f'
                     % (evaling_results['psnr'], evaling_results['ssim'])
                 )
-                eval_images.extend(sr.squeeze(0))
+                eval_images.extend([sr.squeeze(0).squeeze(0)])
                 if args.eval_original_flag:
-                    hr_images.extend(hr.squeeze(0))
+                    hr_images.extend([hr.squeeze(0).squeeze(0)])
 
             if args.eval_original_flag:
                 hr_images = torch.stack(hr_images)
+                hr_images = hr_images.unsqueeze(1)
                 hr_images = utils.make_grid(hr_images, nrow=6, padding=0)
                 utils.save_image(hr_images,
                                  os.path.join(args.out_pic_dir, 'original_hr.png'))
                 args.eval_original_flag = False
 
             eval_images = torch.stack(eval_images)
+            eval_images = eval_images.unsqueeze(1)
             eval_images = utils.make_grid(eval_images, nrow=6, padding=0)
             utils.save_image(
                 eval_images, os.path.join(args.out_pic_dir,
