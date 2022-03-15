@@ -82,14 +82,11 @@ if __name__ == '__main__':
             # (1) Update D network: maximize D(x)-1-D(G(z))
             ###########################
 
-            real_img = Variable(target)
-            if torch.cuda.is_available():
-                real_img = real_img.cuda()
-            z = Variable(data)
-            if torch.cuda.is_available():
-                z = z.cuda()
+            real_img = target.to(device)
+            z = data.to(device)
 
             fake_img = netG(z)
+            fake_img = fake_img.to(device)
 
             netD.zero_grad()
             real_out = netD(real_img).mean()
@@ -135,12 +132,8 @@ if __name__ == '__main__':
                 batch_size = data.size(0)
                 evaling_results['batch_sizes'] += batch_size
 
-                lr = data
-                hr = target
-
-                if torch.cuda.is_available():
-                    lr = lr.cuda()
-                    hr = hr.cuda()
+                lr = data.to(device)
+                hr = target.to(device)
                 sr = netG(lr)
 
                 batch_mse = ((sr-hr)**2).mean()
