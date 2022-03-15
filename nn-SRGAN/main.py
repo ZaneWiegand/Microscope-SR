@@ -12,6 +12,7 @@ from torch.autograd import Variable
 from utils import ssim
 from math import log10
 import pandas as pd
+import torchvision.utils as utils
 # %%
 if __name__ == '__main__':
     class Para(object):
@@ -124,6 +125,7 @@ if __name__ == '__main__':
         netG.eval()
 
         with torch.no_grad():
+            eval_images = []
             eval_bar = tqdm(eval_dataloader)
             evaling_results = {'mse': 0, 'ssims': 0,
                                'psnr': 0, 'ssim': 0,
@@ -153,6 +155,18 @@ if __name__ == '__main__':
                     desc='[converting LR images to SR images] PSNR: %.4f dB SSIM: %.4f'
                     % (evaling_results['psnr'], evaling_results['ssim'])
                 )
+                eval_images.extend(lr.squeeze(0).squeeze(0),
+                                   sr.squeeze(0).squeeze(0),
+                                   hr.squeeze(0).squeeze(0))
+            eval_images = torch.stack(eval_images)
+            # ? torch.chunk()
+            eval_save_bar = tqdm(eval_images, desc='[saving training results]')
+            index = 1
+            for image in eval_save_bar:
+                image = utils.make_grid(image, nrow=3, padding=5)
+                utils.save_image(
+                    image, args.output_dir + 'epoch_%d_index_%d.png' % (epoch, index), padding=5)
+                index += 1
 
         # save model parameters
         torch.save(netG.state_dict(), os.path.join(
