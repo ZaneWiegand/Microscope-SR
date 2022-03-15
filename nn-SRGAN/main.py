@@ -18,7 +18,8 @@ if __name__ == '__main__':
     class Para(object):
         train_file = 'train.h5'
         eval_file = 'eval.h5'
-        output_dir = './weight_output'
+        out_weight_dir = './weight_output'
+        out_pic_dir = './pic_output'
         upscale_factor = 2
         batch_size = 32
         num_epochs = 100
@@ -148,26 +149,24 @@ if __name__ == '__main__':
                     desc='[converting LR images to SR images] PSNR: %.4f dB SSIM: %.4f'
                     % (evaling_results['psnr'], evaling_results['ssim'])
                 )
-                eval_images.extend(lr.squeeze(0).squeeze(0),
-                                   sr.squeeze(0).squeeze(0),
-                                   hr.squeeze(0).squeeze(0))
+                eval_images.extend([sr.squeeze(0).squeeze(0),
+                                   hr.squeeze(0).squeeze(0)])
             eval_images = torch.stack(eval_images)
-            # ? torch.chunk()
             eval_save_bar = tqdm(eval_images, desc='[saving training results]')
             index = 1
             for image in eval_save_bar:
-                image = utils.make_grid(image, nrow=3, padding=5)
+                image = utils.make_grid(image, nrow=2, padding=5)
                 utils.save_image(
-                    image, args.output_dir + 'epoch_%d_index_%d.png' % (epoch, index), padding=5)
+                    image, os.path.join(args.out_pic_dir + 'epoch_%d_index_%d.png' % (epoch, index)), padding=5)
                 index += 1
 
         # save model parameters
         torch.save(netG.state_dict(), os.path.join(
-            args.output_dir, 'netG_epoch_{}_{}.pth'.format(
+            args.out_weight_dir, 'netG_epoch_{}_{}.pth'.format(
                 args.upscale_factor, epoch)))
 
         torch.save(netD.state_dict(), os.path.join(
-            args.output_dir, 'netD_epoch_{}_{}.pth'.format(
+            args.out_weight_dir, 'netD_epoch_{}_{}.pth'.format(
                 args.upscale_factor, epoch)))
 
         # save loss\scores\psnr\ssim
@@ -193,5 +192,5 @@ if __name__ == '__main__':
                     'SSIM': results['ssim']
                 }, index=range(1, epoch+1)
             )
-            data_frame.to_csv(args.output_dir+'srf_'+str(args.upscale_factor) +
+            data_frame.to_csv(args.out_weight_dir+'srf_'+str(args.upscale_factor) +
                               '_train_results.csv', index_label='Epoch')
