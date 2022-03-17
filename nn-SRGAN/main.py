@@ -21,11 +21,11 @@ if __name__ == '__main__':
         out_weight_dir = './weight_output'
         out_pic_dir = './pic_output'
         upscale_factor = 2
-        batch_size = 32
-        num_epochs = 100
+        batch_size = 20
+        num_epochs = 10
         num_workers = 0
         seed = 123
-        eval_original_flag = True
+        eval_original_flag = False
 
     args = Para()
     cudnn.benchmark = True
@@ -61,7 +61,7 @@ if __name__ == '__main__':
         generator_criterion.cuda()
 
     optimizerG = optim.Adam(netG.parameters())
-    optimizerD = optim.Adam(netD.parameters())
+    optimizerD = optim.Adam(netD.parameters(), lr=1e-3)
 
     results = {'d_loss': [], 'g_loss': [],
                'd_score': [], 'g_score': [],
@@ -190,17 +190,4 @@ if __name__ == '__main__':
             running_results['g_score']/running_results['batch_sizes'])
         results['psnr'].append(evaling_results['psnr'])
         results['ssim'].append(evaling_results['ssim'])
-
-        if epoch % 10 == 0 and epoch != 0:
-            data_frame = pd.DataFrame(
-                data={
-                    'Loss_D': results['d_loss'],
-                    'Loss_G': results['g_loss'],
-                    'Score_D': results['d_score'],
-                    'Score_G': results['g_sclre'],
-                    'PSNR': results['psnr'],
-                    'SSIM': results['ssim']
-                }, index=range(1, epoch+1)
-            )
-            data_frame.to_csv(args.out_weight_dir+'srf_'+str(args.upscale_factor) +
-                              '_train_results.csv', index_label='Epoch')
+# %%
