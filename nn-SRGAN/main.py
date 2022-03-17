@@ -25,7 +25,7 @@ if __name__ == '__main__':
         num_epochs = 10
         num_workers = 0
         seed = 123
-        eval_original_flag = False
+        eval_original_flag = True
 
     args = Para()
     cudnn.benchmark = True
