@@ -139,7 +139,7 @@ if __name__ == '__main__':
                 hr = target.to(device)
                 sr = netG(lr)
 
-                batch_mse = ((sr-hr)**2).data.mean()
+                batch_mse = ((sr-hr)**2).mean()
                 evaling_results['mse'] += batch_mse*batch_size
                 batch_ssim = ssim(sr, hr)
                 evaling_results['ssims'] += batch_ssim*batch_size
@@ -189,7 +189,7 @@ if __name__ == '__main__':
         results['g_score'].append(
             running_results['g_score']/running_results['batch_sizes'])
         results['psnr'].append(evaling_results['psnr'])
-        results['ssim'].append(evaling_results['ssim'])
+        results['ssim'].append(evaling_results['ssim'].cpu().numpy())
 # %%
 data_frame = pd.DataFrame(
     data={'Loss_D': results['d_loss'],
@@ -200,6 +200,6 @@ data_frame = pd.DataFrame(
           'SSIM': results['ssim']
           }, index=range(1, epoch+1)
 )
+# %%
 data_frame.to_csv(args.out_weight_dir+'F'+str(args.upscale_factor) +
                   '_train_results.csv', index_label='Epoch')
-# %%
