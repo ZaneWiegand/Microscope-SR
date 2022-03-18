@@ -8,7 +8,6 @@ from models import Generator, Discriminator
 from tqdm import tqdm
 from loss import GeneratorLoss
 import torch.optim as optim
-from torch.autograd import Variable
 from utils import ssim
 from math import log10
 import pandas as pd
@@ -21,8 +20,8 @@ if __name__ == '__main__':
         out_weight_dir = './weight_output'
         out_pic_dir = './pic_output'
         upscale_factor = 2
-        batch_size = 20
-        num_epochs = 10
+        batch_size = 30
+        num_epochs = 15
         num_workers = 0
         seed = 123
         eval_original_flag = True
@@ -201,5 +200,5 @@ data_frame = pd.DataFrame(
           }, index=range(1, epoch+1)
 )
 # %%
-data_frame.to_csv(args.out_weight_dir+'F'+str(args.upscale_factor) +
+data_frame.to_csv('F'+str(args.upscale_factor) +
                   '_train_results.csv', index_label='Epoch')

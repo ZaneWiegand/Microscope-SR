@@ -40,13 +40,13 @@ class GeneratorLoss(nn.Module):
 
     def forward(self, out_labels, out_images, target_images):
         # Adversarial Loss
-        adversarial_loss = -torch.tensor(log10(out_labels+1e-8))
+        adversarial_loss = torch.mean(1-out_labels)
         # Perception Loss #! time consuming
         perception_loss = self.mse_loss(
             self.loss_net(out_images), self.loss_net(target_images))
         # Image Loss
         image_loss = self.mse_loss(out_images, target_images)
-        return image_loss + 0.1 * perception_loss + 0.1 * adversarial_loss
+        return 0.9*image_loss + 0.05*perception_loss + 0.05*adversarial_loss
 
 
 # %%
