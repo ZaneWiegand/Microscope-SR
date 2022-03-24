@@ -48,7 +48,7 @@ def _ssim(img1, img2, window, window_size, channel, size_average=True):
         return ssim_map.mean(1).mean(1).mean(1)
 
 
-def ssim(img1, img2, window_size=11, size_average=True):
+def calc_ssim(img1, img2, window_size=11, size_average=True):
     (_, channel, _, _) = img1.size()
     window = create_window(window_size, channel)
 
@@ -57,3 +57,7 @@ def ssim(img1, img2, window_size=11, size_average=True):
     window = window.type_as(img1)
 
     return _ssim(img1, img2, window, window_size, channel, size_average)
+
+
+def calc_psnr(sr, hr):
+    return 10.*torch.log10(hr.max()**2/torch.mean((hr-sr)**2))

@@ -1,33 +1,34 @@
 # %%
 import torch
 import torch.backends.cudnn as cudnn
-from models import SRCNN
+from models import Generator
 import tifffile as tf
 import numpy as np
-from utils import calc_psnr
+from utils import calc_ssim, calc_psnr
 # %%
 if __name__ == '__main__':
-    weights_file = './weight_output/best.pth'
+    weights_file = './weight_output/netG_epoch_2_14.pth'
+    upscale_factor = 2
     plus = 11
     number = 2
-    # %%
+
     for pic_number in range(number):
-        lr_file = '../Data-Pre-upsample/10x_predict/10x{}.tif'.format(
+        lr_file = '../Data-Post-upsample/10x_predict/10x{}.tif'.format(
             pic_number+plus)
-        hr_file = '../Data-Pre-upsample/20x_predict/20x{}.tif'.format(
+        hr_file = '../Data-Post-upsample/20x_predict/20x{}.tif'.format(
             pic_number+plus)
         cudnn.benchmark = True
         device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        model = SRCNN().to(device)
+        model = Generator(upscale_factor).to(device)
 
-        state_dict = model.state_dict()  # shallow copy
+        state_dict = model.state_dict()
         for n, p in torch.load(weights_file, map_location=lambda storage, loc: storage).items():
             if n in state_dict.keys():
                 state_dict[n].copy_(p)
             else:
                 raise KeyError(n)
+        model.eval()
 
-        model.eval()  # eval mode
         image = tf.imread(lr_file)
         image = np.array(image, dtype=np.float32)
 
@@ -44,11 +45,10 @@ if __name__ == '__main__':
         with torch.no_grad():
             preds = model(input_img).clamp(0.0, 1.0)
 
-        psnr = calc_psnr(input_img, preds)
-        print('PSNR: {:.2f}'.format(psnr))
+        psnr = calc_psnr(preds, target)
+        ssim = calc_ssim(preds, target)
+        print('PSNR: {:.2f}, SSIM: {:.2f}'.format(psnr, ssim))
 
         preds = preds.mul(255.0).cpu().numpy().squeeze(
             0).squeeze(0).astype(np.uint8)  # ? reason
         tf.imsave('./pic_output/10x_out{}.tif'.format(pic_number+plus), preds)
-
-# %%

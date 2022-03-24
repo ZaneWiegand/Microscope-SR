@@ -3,8 +3,8 @@ import torch
 # %%
 
 
-def calc_psnr(img1, img2):
-    return 10.*torch.log10(1./torch.mean((img1-img2)**2))
+def calc_psnr(sr, hr):
+    return 10.*torch.log10(hr.max()**2/torch.mean((hr-sr)**2))
 # %%
 
 

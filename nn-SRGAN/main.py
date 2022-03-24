@@ -8,7 +8,7 @@ from models import Generator, Discriminator
 from tqdm import tqdm
 from loss import GeneratorLoss
 import torch.optim as optim
-from utils import ssim
+from utils import calc_ssim
 from math import log10
 import pandas as pd
 import torchvision.utils as utils
@@ -140,7 +140,7 @@ if __name__ == '__main__':
 
                 batch_mse = ((sr-hr)**2).mean()
                 evaling_results['mse'] += batch_mse*batch_size
-                batch_ssim = ssim(sr, hr)
+                batch_ssim = calc_ssim(sr, hr)
                 evaling_results['ssims'] += batch_ssim*batch_size
                 evaling_results['psnr'] = 10*log10(hr.max()**2/(
                     evaling_results['mse']/evaling_results['batch_sizes']))
