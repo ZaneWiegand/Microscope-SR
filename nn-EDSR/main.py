@@ -1,9 +1,15 @@
 # %%
+import os
+import copy
 import torch.backends.cudnn as cudnn
 import torch
 from models import EDSR
 import torch.nn as nn
 import torch.optim as optim
+from torch.utils.data.dataloader import DataLoader
+from datasets import TrainDataset, EvalDataset
+from utils import calc_psnr, calc_ssim, AverageMeter
+import tqdm
 # %%
 if __name__ == '__main__':
     class Para(object):
@@ -33,3 +39,68 @@ if __name__ == '__main__':
     optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()),
                            lr=args.lr, weight_decay=args.weight_decay,
                            betas=(0.9, 0.999), eps=1e-8)
+
+    train_dataset = TrainDataset(args.train_file)
+    train_dataloader = DataLoader(dataset=train_dataset,
+                                  batch_size=args.batch_size,
+                                  shuffle=True,
+                                  num_workers=args.num_workers,
+                                  pin_memory=True,
+                                  drop_last=True)
+    eval_dataset = EvalDataset(args.eval_file)
+    eval_dataloader = DataLoader(dataset=eval_dataset, batch_size=1)
+    best_weights = copy.deepcopy(model.state_dict())
+    best_epoch = 0
+    best_psnr = 0.0
+
+    for epoch in range(1, args.num_epochs+1):
+        lr = adjust_learning_rate(args, epoch-1)
+        for param_group in optimizer.param_groups:
+            param_group["lr"] = lr
+
+        model.train()
+        epoch_losses = AverageMeter()
+
+        with tqdm(total=(len(train_dataset)-len(train_dataset) % args.batch_size)) as t:
+            t.set_description(
+                'epoch: {}/{}, lr = {:.8f}'.format(epoch, args.num_epochs, optimizer.param_groups[0]["lr"]))
+            for data in train_dataloader:
+                inputs, labels = data
+
+                inputs = inputs.to(device)
+                labels = labels.to(device)
+
+                preds = model(inputs)
+                loss = criterion(preds, labels)
+                epoch_losses.update(loss.item(), len(inputs))
+
+                optimizer.zero_grad()
+                loss.backward()
+                nn.utils.clip_grad_norm(
+                    model.parameters(), args.clip)  # gradient explosion
+                optimizer.step()
+
+                t.set_postfix(loss='{:.6f}'.format(epoch_losses.avg))
+                t.update(len(inputs))
+
+        model.eval()
+        epoch_psnr = AverageMeter()
+        epoch_ssim = AverageMeter()
+
+        for data in eval_dataloader:
+            inputs, labels = data
+
+            inputs = inputs.to(device)
+            labels = labels.to(device)
+
+            with torch.no_grad():
+                preds = model(inputs).clamp(0.0, 1.0)
+
+            epoch_psnr.update(calc_psnr(preds, labels), len(inputs))
+            epoch_ssim.update(calc_ssim(preds, labels), len(inputs))
+
+        print('eval psnr: {:.2f}, eval ssim: {:.2f}'.format(
+            epoch_psnr.avg, epoch_ssim.avg))
+
+        torch.save(model.state_dict(), os.path.join(
+            args.output_dir, 'epoch_{}_lr_{:.8f}_psnr_{:.2f}_ssim{:.2f}.pth'.format(epoch, lr, epoch_psnr.avg, epoch_ssim.avg)))
