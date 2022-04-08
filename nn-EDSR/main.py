@@ -9,7 +9,7 @@ import torch.optim as optim
 from torch.utils.data.dataloader import DataLoader
 from datasets import TrainDataset, EvalDataset
 from utils import calc_psnr, calc_ssim, AverageMeter
-import tqdm
+from tqdm import tqdm
 # %%
 if __name__ == '__main__':
     class Para(object):
@@ -17,7 +17,7 @@ if __name__ == '__main__':
         eval_file = 'eval.h5'
         output_dir = './weight_output'
         batch_size = 20
-        num_epochs = 100
+        num_epochs = 40
         lr = 1e-4
         step = 200
         momentum = 0.9
@@ -49,9 +49,6 @@ if __name__ == '__main__':
                                   drop_last=True)
     eval_dataset = EvalDataset(args.eval_file)
     eval_dataloader = DataLoader(dataset=eval_dataset, batch_size=1)
-    best_weights = copy.deepcopy(model.state_dict())
-    best_epoch = 0
-    best_psnr = 0.0
 
     for epoch in range(1, args.num_epochs+1):
         lr = adjust_learning_rate(args, epoch-1)
@@ -76,8 +73,6 @@ if __name__ == '__main__':
 
                 optimizer.zero_grad()
                 loss.backward()
-                nn.utils.clip_grad_norm(
-                    model.parameters(), args.clip)  # gradient explosion
                 optimizer.step()
 
                 t.set_postfix(loss='{:.6f}'.format(epoch_losses.avg))
