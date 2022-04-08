@@ -17,7 +17,7 @@ if __name__ == '__main__':
         eval_file = 'eval.h5'
         output_dir = './weight_output'
         batch_size = 20
-        num_epochs = 40
+        num_epochs = 50
         lr = 1e-4
         step = 200
         momentum = 0.9
@@ -35,7 +35,7 @@ if __name__ == '__main__':
         return lr
 
     model = EDSR().to(device)
-    criterion = nn.MSELoss(size_average=False)
+    criterion = nn.MSELoss(reduction='sum')
     optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()),
                            lr=args.lr, weight_decay=args.weight_decay,
                            betas=(0.9, 0.999), eps=1e-8)
