@@ -80,7 +80,7 @@ if __name__ == '__main__':
             running_results['batch_sizes'] += batch_size
 
             ############################
-            # (1) Update D network: maximize D(x)-1-D(G(z))
+            # (1) Update D network: minimize E((D(x)-1)**2)+E(D(G(z))**2)
             ###########################
 
             real_img = target.to(device)
@@ -90,15 +90,15 @@ if __name__ == '__main__':
             fake_img = fake_img.to(device)
 
             netD.zero_grad()
-            real_out = netD(real_img).mean()
-            fake_out = netD(fake_img).mean()
+            real_out = ((netD(real_img)-1)**2).mean()
+            fake_out = (netD(fake_img)**2).mean()
 
-            d_loss = 1 - real_out + fake_out
+            d_loss = real_out + fake_out
             d_loss.backward(retain_graph=True)
             optimizerD.step()
 
             ############################
-            # (2) Update G network: minimize 1-D(G(z)) + Perception Loss + Image Loss
+            # (2) Update G network: adversarial Loss + mse loss
 
             netG.zero_grad()
             fake_out = netD(fake_img).mean()
