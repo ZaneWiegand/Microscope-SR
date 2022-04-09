@@ -58,7 +58,7 @@ if __name__ == '__main__':  # ! Must have this
 
         with tqdm(total=(len(train_dataset)-len(train_dataset) % args.batch_size)) as t:
             t.set_description(
-                'epoch: {}/{}'.format(epoch, args.num_epochs - 1))
+                'epoch: {}/{}'.format(epoch, args.num_epochs))
 
             for data in train_dataloader:
                 inputs, labels = data
