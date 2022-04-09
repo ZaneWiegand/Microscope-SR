@@ -1,5 +1,5 @@
 # %%
-import matplotlib.pyplot as plt
+import os
 import glob
 import h5py
 import numpy as np
@@ -74,5 +74,9 @@ if __name__ == '__main__':
     args_eval = Para_eval()
     train(args_train)
     eval(args_eval)
+    if not os.path.exists("weight_output/"):
+        os.makedirs("weight_output/")
+    if not os.path.exists("pic_output/"):
+        os.makedirs("pic_output/")
 
 # %%
