@@ -1,6 +1,5 @@
 # %%
 import os
-import copy
 import torch.backends.cudnn as cudnn
 import torch
 from models import EDSR
@@ -19,7 +18,7 @@ if __name__ == '__main__':
         batch_size = 20
         num_epochs = 50
         lr = 1e-4
-        step = 200
+        step = 10
         momentum = 0.9
         weight_decay = 1e-4
         num_workers = 0
