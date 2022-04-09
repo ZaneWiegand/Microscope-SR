@@ -63,7 +63,7 @@ def calc_psnr(sr, hr):
 
 
 def calc_nqm(sr, hr):
-    return 10.*torch.log10(sum(sr**2)/sum((sr-hr)**2))
+    return 10.*torch.log10(torch.sum(sr**2)/torch.sum((sr-hr)**2))
 
 
 class AverageMeter(object):
