@@ -129,7 +129,6 @@ if __name__ == '__main__':
             eval_images = []
             hr_images = []
             eval_bar = tqdm(eval_dataloader)
-            evaling_results = {'psnr': 0, 'ssim': 0, 'nqm': 0}
 
             for data, target in eval_bar:
                 batch_size = data.size(0)
@@ -144,14 +143,11 @@ if __name__ == '__main__':
 
                 eval_bar.set_description(
                     desc='[converting LR images to SR images] PSNR: %.4f dB SSIM: %.4f NQM: %.4f dB'
-                    % (evaling_results['psnr'], evaling_results['ssim'], evaling_results['nqm'])
+                    % (epoch_psnr.avg, epoch_ssim.avg, epoch_nqm.avg)
                 )
                 eval_images.extend([sr.squeeze(0).squeeze(0)])
                 if args.eval_original_flag:
                     hr_images.extend([hr.squeeze(0).squeeze(0)])
-
-            print('eval psnr: {:.2f}, eval ssim: {:.2f}, eval nqm: {:.2f}'.format(
-                epoch_psnr.avg, epoch_ssim.avg, epoch_nqm.avg))
 
             if args.eval_original_flag:
                 hr_images = torch.stack(hr_images)
@@ -186,9 +182,9 @@ if __name__ == '__main__':
             running_results['d_score']/running_results['batch_sizes'])
         results['g_score'].append(
             running_results['g_score']/running_results['batch_sizes'])
-        results['psnr'].append(evaling_results['psnr'])
-        results['ssim'].append(evaling_results['ssim'].cpu().numpy())
-        results['nqm'].append(evaling_results['nqm'])
+        results['psnr'].append(epoch_psnr.avg)
+        results['ssim'].append(epoch_ssim.avg)
+        results['nqm'].append(epoch_nqm.avg)
 
 # %%
 data_frame = pd.DataFrame(
@@ -202,5 +198,4 @@ data_frame = pd.DataFrame(
           }, index=range(1, epoch+1)
 )
 # %%
-data_frame.to_csv('F'+str(args.upscale_factor) +
-                  '_train_results.csv', index_label='Epoch')
+data_frame.to_csv('train_results.csv', index_label='Epoch')

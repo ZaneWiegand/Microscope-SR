@@ -1,7 +1,7 @@
 # %%
 import os
 import torch
-import copy
+import pandas as pd
 from torch import nn
 import torch.backends.cudnn as cudnn
 import torch.optim as optim
@@ -49,8 +49,10 @@ if __name__ == '__main__':  # ! Must have this
                                   drop_last=True)
     eval_dataset = EvalDataset(args.eval_file)
     eval_dataloader = DataLoader(dataset=eval_dataset, batch_size=1)
-    # %%
-    for epoch in range(args.num_epochs):
+
+    results = {'loss': [], 'psnr': [], 'ssim': [], 'nqm': []}
+
+    for epoch in range(1, args.num_epochs+1):
         model.train()
         epoch_losses = AverageMeter()
 
@@ -100,3 +102,19 @@ if __name__ == '__main__':  # ! Must have this
         torch.save(model.state_dict(), os.path.join(
             args.output_dir, 'epoch_{}_lr_{:.8f}_psnr_{:.2f}_ssim{:.2f}_nqm{:.2f}.pth'.format(
                 epoch, args.lr, epoch_psnr.avg, epoch_ssim.avg, epoch_nqm.avg)))
+
+        results['loss'].append(epoch_losses.avg)
+        results['psnr'].append(epoch_psnr.avg)
+        results['ssim'].append(epoch_ssim.avg)
+        results['nqm'].append(epoch_nqm.avg)
+
+# %%
+data_frame = pd.DataFrame(
+    data={'Loss': results['loss'],
+          'PSNR': results['psnr'],
+          'SSIM': results['ssim'],
+          'NQM': results['nqm']
+          }, index=range(1, epoch+1)
+)
+# %%
+data_frame.to_csv('train_results.csv', index_label='Epoch')
