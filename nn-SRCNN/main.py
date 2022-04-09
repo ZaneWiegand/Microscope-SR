@@ -8,7 +8,7 @@ import torch.optim as optim
 from models import SRCNN
 from datasets import TrainDataset, EvalDataset
 from torch.utils.data.dataloader import DataLoader
-from utils import AverageMeter, calc_psnr
+from utils import AverageMeter, calc_psnr, calc_nqm, calc_ssim
 from tqdm import tqdm
 # print('Ready!')
 # %%
@@ -49,9 +49,6 @@ if __name__ == '__main__':  # ! Must have this
                                   drop_last=True)
     eval_dataset = EvalDataset(args.eval_file)
     eval_dataloader = DataLoader(dataset=eval_dataset, batch_size=1)
-    best_weights = copy.deepcopy(model.state_dict())
-    best_epoch = 0
-    best_psnr = 0.0
     # %%
     for epoch in range(args.num_epochs):
         model.train()
@@ -79,12 +76,10 @@ if __name__ == '__main__':  # ! Must have this
                 t.set_postfix(loss='{:.6f}'.format(epoch_losses.avg))
                 t.update(len(inputs))
 
-        # Save current n parameters
-        torch.save(model.state_dict(), os.path.join(
-            args.output_dir, 'epoch_{}.pth'.format(epoch)))
-
         model.eval()
         epoch_psnr = AverageMeter()
+        epoch_ssim = AverageMeter()
+        epoch_nqm = AverageMeter()
 
         for data in eval_dataloader:
             inputs, labels = data
@@ -96,12 +91,12 @@ if __name__ == '__main__':  # ! Must have this
                 preds = model(inputs).clamp(0.0, 1.0)
 
             epoch_psnr.update(calc_psnr(preds, labels), len(inputs))
-        print('eval psnr: {:.2f}'.format(epoch_psnr.avg))
+            epoch_ssim.update(calc_ssim(preds, labels), len(inputs))
+            epoch_nqm.update(calc_nqm(preds, labels), len(inputs))
 
-        if epoch_psnr.avg > best_psnr:
-            best_epoch = epoch
-            best_psnr = epoch_psnr.avg
-            best_weights = copy.deepcopy(model.state_dict())
-# %%
-print('best epoch: {}, psnr: {:2f}'.format(best_epoch, best_psnr))
-torch.save(best_weights, os.path.join(args.output_dir, 'best.pth'))
+        print('eval psnr: {:.2f}, eval ssim: {:.2f}, eval nqm: {:.2f}'.format(
+            epoch_psnr.avg, epoch_ssim.avg, epoch_nqm.avg))
+
+        torch.save(model.state_dict(), os.path.join(
+            args.output_dir, 'epoch_{}_lr_{:.8f}_psnr_{:.2f}_ssim{:.2f}_nqm{:.2f}.pth'.format(
+                epoch, args.lr, epoch_psnr.avg, epoch_ssim.avg, epoch_nqm.avg)))

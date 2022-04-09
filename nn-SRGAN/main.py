@@ -8,7 +8,7 @@ from models import Generator, Discriminator
 from tqdm import tqdm
 from loss import GeneratorLoss
 import torch.optim as optim
-from utils import calc_ssim
+from utils import calc_ssim, calc_psnr, calc_nqm, AverageMeter
 from math import log10
 import pandas as pd
 import torchvision.utils as utils
@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
     results = {'d_loss': [], 'g_loss': [],
                'd_score': [], 'g_score': [],
-               'psnr': [], 'ssim': []}
+               'psnr': [], 'ssim': [], 'nqm': []}
 
     for epoch in range(1, args.num_epochs + 1):
         train_bar = tqdm(train_dataloader)
@@ -122,37 +122,36 @@ if __name__ == '__main__':
 
         netG.eval()
 
+        epoch_psnr = AverageMeter()
+        epoch_ssim = AverageMeter()
+        epoch_nqm = AverageMeter()
         with torch.no_grad():
             eval_images = []
             hr_images = []
             eval_bar = tqdm(eval_dataloader)
-            evaling_results = {'mse': 0, 'ssims': 0,
-                               'psnr': 0, 'ssim': 0,
-                               'batch_sizes': 0}
+            evaling_results = {'psnr': 0, 'ssim': 0, 'nqm': 0}
 
             for data, target in eval_bar:
                 batch_size = data.size(0)
-                evaling_results['batch_sizes'] += batch_size
 
                 lr = data.to(device)
                 hr = target.to(device)
                 sr = netG(lr)
 
-                batch_mse = ((sr-hr)**2).mean()
-                evaling_results['mse'] += batch_mse*batch_size
-                batch_ssim = calc_ssim(sr, hr)
-                evaling_results['ssims'] += batch_ssim*batch_size
-                evaling_results['psnr'] = 10*log10(hr.max()**2/(
-                    evaling_results['mse']/evaling_results['batch_sizes']))
-                evaling_results['ssim'] = evaling_results['ssims'] / \
-                    evaling_results['batch_sizes']
+                epoch_psnr.update(calc_psnr(sr, hr), len(lr))
+                epoch_ssim.update(calc_ssim(sr, hr), len(lr))
+                epoch_nqm.update(calc_nqm(sr, hr), len(lr))
+
                 eval_bar.set_description(
-                    desc='[converting LR images to SR images] PSNR: %.4f dB SSIM: %.4f'
-                    % (evaling_results['psnr'], evaling_results['ssim'])
+                    desc='[converting LR images to SR images] PSNR: %.4f dB SSIM: %.4f NQM: %.4f dB'
+                    % (evaling_results['psnr'], evaling_results['ssim'], evaling_results['nqm'])
                 )
                 eval_images.extend([sr.squeeze(0).squeeze(0)])
                 if args.eval_original_flag:
                     hr_images.extend([hr.squeeze(0).squeeze(0)])
+
+            print('eval psnr: {:.2f}, eval ssim: {:.2f}, eval nqm: {:.2f}'.format(
+                epoch_psnr.avg, epoch_ssim.avg, epoch_nqm.avg))
 
             if args.eval_original_flag:
                 hr_images = torch.stack(hr_images)
@@ -189,6 +188,8 @@ if __name__ == '__main__':
             running_results['g_score']/running_results['batch_sizes'])
         results['psnr'].append(evaling_results['psnr'])
         results['ssim'].append(evaling_results['ssim'].cpu().numpy())
+        results['nqm'].append(evaling_results['nqm'])
+
 # %%
 data_frame = pd.DataFrame(
     data={'Loss_D': results['d_loss'],
@@ -196,7 +197,8 @@ data_frame = pd.DataFrame(
           'Score_D': results['d_score'],
           'Score_G': results['g_score'],
           'PSNR': results['psnr'],
-          'SSIM': results['ssim']
+          'SSIM': results['ssim'],
+          'NQM': results['nqm']
           }, index=range(1, epoch+1)
 )
 # %%

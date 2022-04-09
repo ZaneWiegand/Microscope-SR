@@ -47,19 +47,23 @@ def _ssim(img1, img2, window, window_size, channel, size_average=True):
         return ssim_map.mean(1).mean(1).mean(1)
 
 
-def calc_ssim(img1, img2, window_size=11, size_average=True):
-    (_, channel, _, _) = img1.size()
+def calc_ssim(sr, hr, window_size=11, size_average=True):
+    (_, channel, _, _) = sr.size()
     window = create_window(window_size, channel)
 
-    if img1.is_cuda:
-        window = window.cuda(img1.get_device())
-    window = window.type_as(img1)
+    if sr.is_cuda:
+        window = window.cuda(sr.get_device())
+    window = window.type_as(sr)
 
-    return _ssim(img1, img2, window, window_size, channel, size_average)
+    return _ssim(sr, hr, window, window_size, channel, size_average)
 
 
 def calc_psnr(sr, hr):
     return 10.*torch.log10(hr.max()**2/torch.mean((hr-sr)**2))
+
+
+def calc_nqm(sr, hr):
+    return 10.*torch.log10(sum(sr**2)/sum((sr-hr)**2))
 
 
 class AverageMeter(object):
@@ -73,7 +77,6 @@ class AverageMeter(object):
         self.count = 0
 
     def update(self, val, n=1):
-        # 返回的val是每个Batch的MSELoss
         self.val = val
         self.sum += val*n
         self.count += n

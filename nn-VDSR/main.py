@@ -8,7 +8,7 @@ import torch.optim as optim
 from torch.utils.data.dataloader import DataLoader
 from datasets import TrainDataset, EvalDataset
 from models import VDSR
-from utils import AverageMeter, calc_psnr
+from utils import AverageMeter, calc_psnr, calc_nqm, calc_ssim
 from tqdm import tqdm
 
 import warnings
@@ -88,6 +88,8 @@ if __name__ == '__main__':
 
         model.eval()
         epoch_psnr = AverageMeter()
+        epoch_ssim = AverageMeter()
+        epoch_nqm = AverageMeter()
 
         for data in eval_dataloader:
             inputs, labels = data
@@ -99,8 +101,12 @@ if __name__ == '__main__':
                 preds = model(inputs).clamp(0.0, 1.0)
 
             epoch_psnr.update(calc_psnr(preds, labels), len(inputs))
+            epoch_ssim.update(calc_ssim(preds, labels), len(inputs))
+            epoch_nqm.update(calc_nqm(preds, labels), len(inputs))
 
-        print('eval psnr: {:.2f}'.format(epoch_psnr.avg))
+        print('eval psnr: {:.2f}, eval ssim: {:.2f}, eval nqm: {:.2f}'.format(
+            epoch_psnr.avg, epoch_ssim.avg, epoch_nqm.avg))
 
         torch.save(model.state_dict(), os.path.join(
-            args.output_dir, 'epoch_{}_lr_{:.8f}_psnr_{:.2f}.pth'.format(epoch, lr, epoch_psnr.avg)))
+            args.output_dir, 'epoch_{}_lr_{:.8f}_psnr_{:.2f}_ssim{:.2f}_nqm{:.2f}.pth'.format(
+                epoch, lr, epoch_psnr.avg, epoch_ssim.avg, epoch_nqm.avg)))
