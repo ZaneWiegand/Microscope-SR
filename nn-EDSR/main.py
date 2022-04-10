@@ -106,9 +106,9 @@ if __name__ == '__main__':
                 epoch, lr, epoch_psnr.avg, epoch_ssim.avg, epoch_nqm.avg)))
 
         results['loss'].append(epoch_losses.avg)
-        results['psnr'].append(epoch_psnr.avg)
-        results['ssim'].append(epoch_ssim.avg)
-        results['nqm'].append(epoch_nqm.avg)
+        results['psnr'].append(epoch_psnr.avg.cpu().squeeze(0).item())
+        results['ssim'].append(epoch_ssim.avg.cpu().squeeze(0).item())
+        results['nqm'].append(epoch_nqm.avg.cpu().squeeze(0).item())
 
 # %%
 data_frame = pd.DataFrame(

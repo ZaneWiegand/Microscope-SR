@@ -58,9 +58,9 @@ class Para_train(object):
     lr_images_dir = '../Data-Post-upsample/10x_train'
     hr_images_dir = '../Data-Post-upsample/20x_train'
     output_path = 'train.h5'
-    hr_patch_size = 150
+    hr_patch_size = 100
     lr_patch_size = hr_patch_size//2
-    hr_stride = 50
+    hr_stride = 100
     lr_stride = hr_stride//2
 
 

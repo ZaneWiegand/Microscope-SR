@@ -29,7 +29,7 @@ class EDSR(nn.Module):
 
         self.conv_input = nn.Conv2d(
             in_channels=1, out_channels=128, kernel_size=3, padding=1, stride=1, bias=False)
-        self.residual = self.make_layer(Residual_Block, 32)
+        self.residual = self.make_layer(Residual_Block, 12)
         self.conv_mid = nn.Conv2d(
             in_channels=128, out_channels=128, kernel_size=3, padding=1, stride=1, bias=False)
         self.upscale2x = nn.Sequential(

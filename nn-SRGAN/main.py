@@ -20,8 +20,8 @@ if __name__ == '__main__':
         out_weight_dir = './weight_output'
         out_pic_dir = './pic_output'
         upscale_factor = 2
-        batch_size = 30
-        num_epochs = 15
+        batch_size = 20
+        num_epochs = 2
         num_workers = 0
         seed = 123
         eval_original_flag = True
@@ -182,9 +182,9 @@ if __name__ == '__main__':
             running_results['d_score']/running_results['batch_sizes'])
         results['g_score'].append(
             running_results['g_score']/running_results['batch_sizes'])
-        results['psnr'].append(epoch_psnr.avg)
-        results['ssim'].append(epoch_ssim.avg)
-        results['nqm'].append(epoch_nqm.avg)
+        results['psnr'].append(epoch_psnr.avg.cpu().squeeze(0).item())
+        results['ssim'].append(epoch_ssim.avg.cpu().squeeze(0).item())
+        results['nqm'].append(epoch_nqm.avg.cpu().squeeze(0).item())
 
 # %%
 data_frame = pd.DataFrame(
