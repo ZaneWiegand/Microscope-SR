@@ -9,7 +9,6 @@ from tqdm import tqdm
 from loss import GeneratorLoss
 import torch.optim as optim
 from utils import calc_ssim, calc_psnr, calc_nqm, AverageMeter
-from math import log10
 import pandas as pd
 import torchvision.utils as utils
 # %%
@@ -21,7 +20,7 @@ if __name__ == '__main__':
         out_pic_dir = './pic_output'
         upscale_factor = 2
         batch_size = 20
-        num_epochs = 2
+        num_epochs = 20
         num_workers = 0
         seed = 123
         eval_original_flag = True

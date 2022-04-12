@@ -18,7 +18,7 @@ class GeneratorLoss(nn.Module):
         # l1 Loss
         l1_loss = self.l1_loss(out_images, target_images)
 
-        # Image Loss
+        # mse Loss
         mse_loss = self.mse_loss(out_images, target_images)
 
         return mse_loss + 0.1*adversarial_loss
