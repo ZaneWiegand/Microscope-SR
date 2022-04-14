@@ -11,8 +11,12 @@ y_filter = x_filter.T
 pic = cv.imread('knight.jpg', 0)
 newx = convolve2d(pic, x_filter)
 newy = convolve2d(pic, y_filter)
-plt.imsave('x.jpg', newx, cmap='gray')
-plt.imsave('y.jpg', newy, cmap='gray')
+plt.figure()
+plt.subplot(1, 2, 1)
+plt.imshow(newx, cmap='gray')
+plt.subplot(1, 2, 2)
+plt.imshow(newy, cmap='gray')
+plt.tight_layout()
 # %%
 template = np.zeros([9, 9])
 xcenter = (template.shape[0]-1)/2
