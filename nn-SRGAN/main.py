@@ -20,7 +20,7 @@ if __name__ == '__main__':
         out_pic_dir = './pic_output'
         upscale_factor = 2
         batch_size = 20
-        num_epochs = 20
+        num_epochs = 80
         num_workers = 0
         seed = 123
         eval_original_flag = True
@@ -58,7 +58,7 @@ if __name__ == '__main__':
         netD.cuda()
         generator_criterion.cuda()
 
-    optimizerG = optim.Adam(netG.parameters())
+    optimizerG = optim.Adam(netG.parameters(), lr=1e-3)
     optimizerD = optim.Adam(netD.parameters(), lr=1e-3)
 
     results = {'d_loss': [], 'g_loss': [],

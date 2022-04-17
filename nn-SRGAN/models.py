@@ -34,7 +34,8 @@ class Generator(nn.Module):
         block6 = self.block6(block5)
         block7 = self.block7(block6)
         block8 = self.block8(block1+block7)
-        return (torch.tanh(block8)+1)/2
+        return block8
+    # (torch.tanh(block8)+1)/2
 
 
 class ResidualBlock(nn.Module):
