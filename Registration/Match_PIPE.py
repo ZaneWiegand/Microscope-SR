@@ -68,7 +68,7 @@ def fft_CMM(f, g):
     G = np.fft.fft2(g)
     xx = F * np.conj(G)
     CMMmap = np.fft.fftshift(np.fft.ifft2(xx))
-    return CMMmap.real
+    return CMMmap.real  # TODO: np.abs(CMMmap)
 
 
 def PPMCC(obj, ref, r, c):
