@@ -4,7 +4,9 @@
 
 The raw data (unregistered images) is in *./Registration/Raw-Data*.
 
-Use *./Registration/Match_PIPE_down.py* (for post-upsample model) or *./Registration/Match_PIPE_up.py* (for pre-upsample model) to do image-registration.
+Run the following files to do image-registration:
+* *./Registration/Match_PIPE_down.py* (for post-upsample model)
+* *./Registration/Match_PIPE_up.py* (for pre-upsample model) 
 
 The image-registration results are in *./Registration/Registration-down* and *./Registration/Registration-up*.
 
