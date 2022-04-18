@@ -104,12 +104,12 @@ for i in range(layer):
 compare_unreg_reg(new, target, first_warp_img, global_method, 0, True)
 compare_unreg_reg(new, target, warp_img, global_method + "-PIPE", 0, True)
 plt.figure(figsize=(10, 10))
-plt.imshow(first_warp_img.astype(np.uint8) - warp_img.astype(np.uint8))
+plt.imshow(20*np.log10(first_warp_img - warp_img).astype(np.uint8))
 plt.axis("off")
 plt.show()
 tf.imwrite(
     "{}-PIPE.tif".format(global_method),
-    first_warp_img.astype(np.uint8) - warp_img.astype(np.uint8),
+    20*np.log10(first_warp_img - warp_img).astype(np.uint8),
 )
 target = pic20x
 # %%
