@@ -6,3 +6,4 @@ nn-SRGAN/eval.h5
 nn-SRGAN/train.h5
 nn-EDSR/eval.h5
 nn-EDSR/train.h5
+nn-SRGAN/pic_output
