@@ -16,7 +16,7 @@ def preprocess(img, threshold):
 # %%
 flag = False  # 是否使用 OTSU 计算阈值并过滤噪声
 number = 2
-plus = 10
+plus = 9
 # %%
 for i in range(number):
     img10x = tf.imread(f'../Data-Post-upsample/10x_origin/10x{i+1+plus}.tif')

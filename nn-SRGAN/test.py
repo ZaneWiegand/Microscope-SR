@@ -7,7 +7,7 @@ import numpy as np
 from utils import calc_ssim, calc_psnr
 # %%
 if __name__ == '__main__':
-    weights_file = './weight_output/netG_epoch_2_14.pth'
+    weights_file = './weight_output/netG_epoch_2_89.pth'
     upscale_factor = 2
     plus = 11
     number = 2

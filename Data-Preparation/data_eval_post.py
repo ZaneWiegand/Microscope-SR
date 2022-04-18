@@ -16,7 +16,7 @@ def preprocess(img, threshold):
 # %%
 flag = False  # 是否使用 OTSU 计算阈值并过滤噪声
 number = 2
-plus = 8
+plus = 7
 j = 0
 # %%
 for i in range(number):

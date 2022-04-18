@@ -165,11 +165,11 @@ if __name__ == '__main__':
 
         # save model parameters
         torch.save(netG.state_dict(), os.path.join(
-            args.out_weight_dir, 'netG_epoch_{}_{}.pth'.format(
+            args.out_weight_dir, 'netG_F{}_epoch_{}.pth'.format(
                 args.upscale_factor, epoch)))
 
         torch.save(netD.state_dict(), os.path.join(
-            args.out_weight_dir, 'netD_epoch_{}_{}.pth'.format(
+            args.out_weight_dir, 'netD_F{}_epoch_{}.pth'.format(
                 args.upscale_factor, epoch)))
 
         # save loss\scores\psnr\ssim
