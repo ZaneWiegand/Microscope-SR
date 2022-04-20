@@ -32,4 +32,4 @@ Congratulations! The data preparation for deep learning microscope super resolut
 For each model (nn-EDSR/nn-SRCNN/nn-SRGAN/nn-VDSR), do the following 3 steps:
 * run *prepare.py* to make .h5 data files.
 * run *main.py* to train the model.
-* run *test.py* to predict the HR images.
+* !!!!!WARNING!!!!! run *test.py* to predict the HR images.
