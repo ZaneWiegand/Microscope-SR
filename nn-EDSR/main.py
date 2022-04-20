@@ -17,7 +17,7 @@ if __name__ == '__main__':
         eval_file = 'eval.h5'
         output_dir = './weight_output'
         batch_size = 20
-        num_epochs = 80
+        num_epochs = 100
         lr = 1e-4
         step = 20
         momentum = 0.9

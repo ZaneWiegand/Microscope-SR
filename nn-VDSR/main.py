@@ -20,12 +20,12 @@ if __name__ == '__main__':
         eval_file = 'eval.h5'
         output_dir = './weight_output'
         batch_size = 20  # Training batch size
-        num_epochs = 80  # Number of epochs to train for
+        num_epochs = 100  # Number of epochs to train for
         lr = 0.1  # Learning rate
         clip = 0.4  # Clipping Gradients
         momentum = 0.9  # Momentum (for optimizer)
         weight_decay = 1e-4  # Weight decay (for optimizer)
-        step = 10  # Sets the learning rate to the initial LR decayed by momentum every n epochs
+        step = 20  # Sets the learning rate to the initial LR decayed by momentum every n epochs
         num_workers = 0
         seed = 123
 
