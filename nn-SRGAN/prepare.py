@@ -70,13 +70,37 @@ class Para_eval(object):
     output_path = 'eval.h5'
 
 
+class Para_train_syn(object):
+    lr_images_dir = '../Data-Post-upsample/10x_train_syn'
+    hr_images_dir = '../Data-Post-upsample/20x_train'
+    output_path = 'train_syn.h5'
+    hr_patch_size = 100
+    lr_patch_size = hr_patch_size//2
+    hr_stride = 100
+    lr_stride = hr_stride//2
+
+
+class Para_eval_syn(object):
+    lr_images_dir = '../Data-Post-upsample/10x_eval_syn'
+    hr_images_dir = '../Data-Post-upsample/20x_eval'
+    output_path = 'eval_syn.h5'
+
+
 # %%
 if __name__ == '__main__':
     args_train = Para_train()
     args_eval = Para_eval()
+    args_train_syn = Para_train_syn()
+    args_eval_syn = Para_eval_syn()
     train(args_train)
     eval(args_eval)
+    train(args_train_syn)
+    eval(args_eval_syn)
     if not os.path.exists("weight_output/"):
         os.makedirs("weight_output/")
     if not os.path.exists("pic_output/"):
         os.makedirs("pic_output/")
+    if not os.path.exists("weight_output_syn/"):
+        os.makedirs("weight_output_syn/")
+    if not os.path.exists("pic_output_syn/"):
+        os.makedirs("pic_output_syn/")

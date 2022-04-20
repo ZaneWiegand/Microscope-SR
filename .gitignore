@@ -6,4 +6,14 @@ nn-SRGAN/eval.h5
 nn-SRGAN/train.h5
 nn-EDSR/eval.h5
 nn-EDSR/train.h5
+
+nn-SRCNN/eval_syn.h5
+nn-SRCNN/train_syn.h5
+nn-VDSR/eval_syn.h5
+nn-VDSR/train_syn.h5
+nn-SRGAN/eval_syn.h5
+nn-SRGAN/train_syn.h5
+nn-EDSR/eval_syn.h5
+nn-EDSR/train_syn.h5
+
 nn-SRGAN/pic_output

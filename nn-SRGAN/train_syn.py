@@ -14,16 +14,16 @@ import torchvision.utils as utils
 # %%
 if __name__ == '__main__':
     class Para(object):
-        train_file = 'train.h5'
-        eval_file = 'eval.h5'
-        out_weight_dir = './weight_output'
-        out_pic_dir = './pic_output'
+        train_file = 'train_syn.h5'
+        eval_file = 'eval_syn.h5'
+        out_weight_dir = './weight_output_syn'
+        # out_pic_dir = './pic_output_syn'
         upscale_factor = 2
         batch_size = 20
         num_epochs = 100
         num_workers = 0
         seed = 123
-        eval_original_flag = True
+        # eval_original_flag = True
 
     args = Para()
     cudnn.benchmark = True
@@ -125,8 +125,10 @@ if __name__ == '__main__':
         epoch_ssim = AverageMeter()
         epoch_nqm = AverageMeter()
         with torch.no_grad():
-            eval_images = []
-            hr_images = []
+
+            # eval_images = []
+            # hr_images = []
+
             eval_bar = tqdm(eval_dataloader)
 
             for data, target in eval_bar:
@@ -144,6 +146,8 @@ if __name__ == '__main__':
                     desc='[converting LR images to SR images] PSNR: %.4f dB SSIM: %.4f NQM: %.4f dB'
                     % (epoch_psnr.avg, epoch_ssim.avg, epoch_nqm.avg)
                 )
+
+            """
                 eval_images.extend([sr.squeeze(0).squeeze(0)])
                 if args.eval_original_flag:
                     hr_images.extend([hr.squeeze(0).squeeze(0)])
@@ -162,6 +166,7 @@ if __name__ == '__main__':
             utils.save_image(
                 eval_images, os.path.join(args.out_pic_dir,
                                           'scale_{}_epoch_{}.png'.format(args.upscale_factor, epoch)))
+            """
 
         # save model parameters
         torch.save(netG.state_dict(), os.path.join(
@@ -197,4 +202,4 @@ data_frame = pd.DataFrame(
           }, index=range(1, epoch+1)
 )
 # %%
-data_frame.to_csv('train_results.csv', index_label='Epoch')
+data_frame.to_csv('train_results_syn.csv', index_label='Epoch')

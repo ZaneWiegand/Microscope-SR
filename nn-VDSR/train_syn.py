@@ -1,27 +1,31 @@
 # %%
 import os
 import pandas as pd
-import torch.backends.cudnn as cudnn
 import torch
-from models import EDSR
+import torch.backends.cudnn as cudnn
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data.dataloader import DataLoader
 from datasets import TrainDataset, EvalDataset
-from utils import calc_psnr, calc_ssim, calc_nqm, AverageMeter
+from models import VDSR
+from utils import AverageMeter, calc_psnr, calc_nqm, calc_ssim
 from tqdm import tqdm
+
+import warnings
+warnings.filterwarnings("ignore")
 # %%
 if __name__ == '__main__':
     class Para(object):
-        train_file = 'train.h5'
-        eval_file = 'eval.h5'
-        output_dir = './weight_output'
-        batch_size = 20
-        num_epochs = 100
-        lr = 1e-4
-        step = 20
-        momentum = 0.9
-        weight_decay = 1e-4
+        train_file = 'train_syn.h5'
+        eval_file = 'eval_syn.h5'
+        output_dir = './weight_output_syn'
+        batch_size = 20  # Training batch size
+        num_epochs = 100  # Number of epochs to train for
+        lr = 0.1  # Learning rate
+        clip = 0.4  # Clipping Gradients
+        momentum = 0.9  # Momentum (for optimizer)
+        weight_decay = 1e-4  # Weight decay (for optimizer)
+        step = 20  # Sets the learning rate to the initial LR decayed by momentum every n epochs
         num_workers = 0
         seed = 123
 
@@ -34,11 +38,10 @@ if __name__ == '__main__':
         lr = Para.lr*(0.1**(epoch//Para.step))
         return lr
 
-    model = EDSR().to(device)
-    criterion = nn.MSELoss(reduction='sum')
-    optimizer = optim.Adam(filter(lambda p: p.requires_grad, model.parameters()),
-                           lr=args.lr, weight_decay=args.weight_decay,
-                           betas=(0.9, 0.999), eps=1e-8)
+    model = VDSR().to(device)
+    criterion = nn.MSELoss(size_average=False)
+    optimizer = optim.SGD(model.parameters(), lr=args.lr,
+                          momentum=args.momentum, weight_decay=args.weight_decay)
 
     train_dataset = TrainDataset(args.train_file)
     train_dataloader = DataLoader(dataset=train_dataset,
@@ -75,6 +78,8 @@ if __name__ == '__main__':
 
                 optimizer.zero_grad()
                 loss.backward()
+                nn.utils.clip_grad_norm(
+                    model.parameters(), args.clip)  # gradient explosion
                 optimizer.step()
 
                 t.set_postfix(loss='{:.6f}'.format(epoch_losses.avg))
@@ -119,4 +124,4 @@ data_frame = pd.DataFrame(
           }, index=range(1, epoch+1)
 )
 # %%
-data_frame.to_csv('train_results.csv', index_label='Epoch')
+data_frame.to_csv('train_results_syn.csv', index_label='Epoch')
