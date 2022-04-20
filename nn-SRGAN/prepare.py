@@ -72,7 +72,7 @@ class Para_eval(object):
 
 class Para_train_syn(object):
     lr_images_dir = '../Data-Post-upsample/10x_train_syn'
-    hr_images_dir = '../Data-Post-upsample/20x_train'
+    hr_images_dir = '../Data-Post-upsample/20x_train_syn'
     output_path = 'train_syn.h5'
     hr_patch_size = 100
     lr_patch_size = hr_patch_size//2
@@ -82,7 +82,7 @@ class Para_train_syn(object):
 
 class Para_eval_syn(object):
     lr_images_dir = '../Data-Post-upsample/10x_eval_syn'
-    hr_images_dir = '../Data-Post-upsample/20x_eval'
+    hr_images_dir = '../Data-Post-upsample/20x_eval_syn'
     output_path = 'eval_syn.h5'
 
 
