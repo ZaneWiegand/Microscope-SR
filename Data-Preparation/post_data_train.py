@@ -7,6 +7,7 @@ hr_origin_dir = '../Data-Post-upsample/20x_origin'
 lr_origin_dir = '../Data-Post-upsample/10x_origin'
 hr_save_dir = '../Data-Post-upsample/20x_train'
 lr_save_dir = '../Data-Post-upsample/10x_train'
+pic_list = [1, 2, 3, 4, 5, 6, 7, 8]
 hr_size = 900
 hr_stride_x = 500
 hr_stride_y = 900
@@ -16,7 +17,7 @@ lr_stride_y = hr_stride_y//2
 hr_data_num = 1
 lr_data_num = 1
 # %%
-for pic_num in [1, 2, 3, 4, 5, 6, 7, 8]:
+for pic_num in pic_list:
     img20x = tf.imread(f'{hr_origin_dir}/20x{pic_num}.tif')
     img10x = tf.imread(f'{lr_origin_dir}/10x{pic_num}.tif')
     img20x = img20x[60:-60, 80:-80]
@@ -32,7 +33,7 @@ for pic_num in [1, 2, 3, 4, 5, 6, 7, 8]:
             tf.imwrite(f'{lr_save_dir}/10x{lr_data_num}.tif', lr)
             lr_data_num += 1
 # %%
-for pic_num in [1, 2, 3, 4, 5, 6, 7, 8]:
+for pic_num in pic_list:
     for flip_f in [-1, 0, 1]:
         img20x = tf.imread(f'{hr_origin_dir}/20x{pic_num}.tif')
         img10x = tf.imread(f'{lr_origin_dir}/10x{pic_num}.tif')
@@ -51,7 +52,7 @@ for pic_num in [1, 2, 3, 4, 5, 6, 7, 8]:
                 tf.imwrite(f'{lr_save_dir}/10x{lr_data_num}.tif', lr)
                 lr_data_num += 1
 # %%
-for pic_num in [1, 2, 3, 4, 5, 6, 7, 8]:
+for pic_num in pic_list:
     img20x = tf.imread(f'{hr_origin_dir}/20x{pic_num}.tif')
     img10x = tf.imread(f'{lr_origin_dir}/10x{pic_num}.tif')
     img20x = img20x[60:-60, 80:-80]
