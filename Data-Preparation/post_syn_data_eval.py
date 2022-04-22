@@ -45,10 +45,10 @@ def downsample(img, F):
 
 
 def degradation(img, resize_flag):
-    # first degradation blur [0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5]
+    # first degradation blur [0.6,0.7,0.8,0.9,1.0,1.1,1.2,1.3]
     # add noise Gauss [0.009,0.008,0.007,0.006,0.005,0.004,0.003,0.002] or Poisson [2,3,4,5,6,7,8,9]
     # resize (if necessary)
-    # second degradation blur [1.0,1.1,1.2,1.3]
+    # second degradation blur [0.8,0.9,1.0,1.1]
     # add noise Gauss [0.005,0.004,0.003,0.002] or Poisson [6,7,8,9]
     blur = np.random.choice([0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3])
     PSF = create_gauss_kernel(img.shape, blur, 0, 0, 1)

@@ -45,12 +45,12 @@ def downsample(img, F):
 
 
 def degradation(img, resize_flag):
-    # first degradation blur [0.8,0.9,1.0,1.1,1.2,1.3,1.4,1.5]
-    # add noise Gauss [0.009,0.008,0.007,0.006,0.005,0.004,0.003,0.002] or Poisson [2,3,4,5,6,7,8,9]
+    # first degradation blur [1.0,1.1,1.2,1.3,1.4,1.5,1.6,1.7]
+    # add noise Gauss [0.019,0.018,0.017,0.016,0.015,0.014,0.013,0.012] or Poisson [0.5,1.5,2.5,3.5,4.5,5.5,6.5,7.5]
     # resize (if necessary)
-    # second degradation blur [1.0,1.1,1.2,1.3]
-    # add noise Gauss [0.005,0.004,0.003,0.002] or Poisson [6,7,8,9]
-    blur = np.random.choice([0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3])
+    # second degradation blur [1.2,1.3,1.4,1.5]
+    # add noise Gauss [0.015,0.014,0.013,0.012] or Poisson [4.5,5.5,6.5,7.5]
+    blur = np.random.choice([1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7])
     PSF = create_gauss_kernel(img.shape, blur, 0, 0, 1)
     img = PSF_process(img, PSF)
 
@@ -59,21 +59,21 @@ def degradation(img, resize_flag):
 
     if np.random.choice([0, 1]):
         sigma = np.random.choice(
-            [0.009, 0.008, 0.007, 0.006, 0.005, 0.004, 0.003, 0.002])
+            [0.019, 0.018, 0.017, 0.016, 0.015, 0.014, 0.013, 0.012])
         img = add_Gauss_noise(img, 0, sigma)
     else:
-        PEAK = np.random.choice([2, 3, 4, 5, 6, 7, 8, 9])
+        PEAK = np.random.choice([0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5])
         img = add_Poisson_noise(img, PEAK)
 
-    blur = np.random.choice([0.8, 0.9, 1.0, 1.1])
+    blur = np.random.choice([1.2, 1.3, 1.4, 1.5])
     PSF = create_gauss_kernel(img.shape, blur, 0, 0, 1)
     img = PSF_process(img, PSF)
 
     if np.random.choice([0, 1]):
-        sigma = np.random.choice([0.005, 0.004, 0.003, 0.002])
+        sigma = np.random.choice([0.015, 0.014, 0.013, 0.012])
         img = add_Gauss_noise(img, 0, sigma)
     else:
-        PEAK = np.random.choice([6, 7, 8, 9])
+        PEAK = np.random.choice([4.5, 5.5, 6.5, 7.5])
         img = add_Poisson_noise(img, PEAK)
 
     return img
