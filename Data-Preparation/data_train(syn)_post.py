@@ -1,5 +1,4 @@
 # %%
-from cv2 import resize
 import tifffile as tf
 import matplotlib.pyplot as plt
 import cv2 as cv
