@@ -59,7 +59,7 @@ class Para_train(object):
     hr_images_dir = '../Data-Pre-upsample/20x_train'
     output_path = 'train.h5'
     patch_size = 50
-    stride = 40
+    stride = 50
 
 
 class Para_eval(object):
@@ -73,7 +73,7 @@ class Para_train_syn(object):
     hr_images_dir = '../Data-Pre-upsample/20x_train_syn'
     output_path = 'train_syn.h5'
     patch_size = 50
-    stride = 40
+    stride = 50
 
 
 class Para_eval_syn(object):
