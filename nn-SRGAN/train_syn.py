@@ -143,7 +143,7 @@ if __name__ == '__main__':
                 epoch_nqm.update(calc_nqm(sr, hr), len(lr))
 
                 eval_bar.set_description(
-                    desc='[converting LR images to SR images] PSNR: %.4f dB SSIM: %.4f NQM: %.4f dB'
+                    desc='[LR images --> SR images] PSNR: %.4f dB SSIM: %.4f NQM: %.4f dB'
                     % (epoch_psnr.avg, epoch_ssim.avg, epoch_nqm.avg)
                 )
 

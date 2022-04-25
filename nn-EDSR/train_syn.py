@@ -85,7 +85,8 @@ if __name__ == '__main__':
         epoch_ssim = AverageMeter()
         epoch_nqm = AverageMeter()
 
-        for data in eval_dataloader:
+        eval_bar = tqdm(eval_dataloader)
+        for data in eval_bar:
             inputs, labels = data
 
             inputs = inputs.to(device)
@@ -98,8 +99,10 @@ if __name__ == '__main__':
             epoch_ssim.update(calc_ssim(preds, labels), len(inputs))
             epoch_nqm.update(calc_nqm(preds, labels), len(inputs))
 
-        print('eval psnr: {:.2f}, eval ssim: {:.2f}, eval nqm: {:.2f}'.format(
-            epoch_psnr.avg, epoch_ssim.avg, epoch_nqm.avg))
+            eval_bar.set_description(
+                desc='[LR images --> SR images] PSNR: %.4f dB SSIM: %.4f NQM: %.4f dB'
+                % (epoch_psnr.avg, epoch_ssim.avg, epoch_nqm.avg)
+            )
 
         torch.save(model.state_dict(), os.path.join(
             args.output_dir, 'epoch_{}_lr_{:.8f}_psnr_{:.2f}_ssim{:.2f}_nqm{:.2f}.pth'.format(
