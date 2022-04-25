@@ -25,7 +25,7 @@ if __name__ == '__main__':
         clip = 0.4  # Clipping Gradients
         momentum = 0.9  # Momentum (for optimizer)
         weight_decay = 1e-4  # Weight decay (for optimizer)
-        step = 20  # Sets the learning rate to the initial LR decayed by momentum every n epochs
+        step = 25  # Sets the learning rate to the initial LR decayed by momentum every n epochs
         num_workers = 0
         seed = 123
 

@@ -18,8 +18,8 @@ if __name__ == '__main__':
         output_dir = './weight_output_syn'
         batch_size = 20
         num_epochs = 100
-        lr = 1e-3
-        step = 20
+        lr = 1e-4
+        step = 25
         momentum = 0.9
         weight_decay = 1e-4
         num_workers = 0
