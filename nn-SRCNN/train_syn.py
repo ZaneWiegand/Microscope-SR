@@ -38,7 +38,7 @@ if __name__ == '__main__':  # ! Must have this
 
     # %%
     model = SRCNN().to(device)
-    criterion = nn.MSELoss()
+    criterion = nn.MSELoss(reduction='sum')
     optimizer = optim.Adam([{'params': model.conv1.parameters()},
                             {'params': model.conv2.parameters()},
                             {'params': model.conv3.parameters()}],  # 'lr': args.lr*0.1

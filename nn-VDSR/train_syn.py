@@ -39,7 +39,7 @@ if __name__ == '__main__':
         return lr
 
     model = VDSR().to(device)
-    criterion = nn.MSELoss(size_average=False)
+    criterion = nn.MSELoss(reduction='sum')
     optimizer = optim.SGD(model.parameters(), lr=args.lr,
                           momentum=args.momentum, weight_decay=args.weight_decay)
 
