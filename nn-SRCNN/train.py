@@ -22,8 +22,13 @@ if __name__ == '__main__':  # ! Must have this
         lr = 1e-4  # float
         batch_size = 20  # int
         num_epochs = 100  # int
+        step = 25  # Sets the learning rate to the initial LR decayed by momentum every n epochs
         num_workers = 0  # int
         seed = 123  # int
+
+    def adjust_learning_rate(Para, epoch):
+        lr = Para.lr*(0.1**(epoch//Para.step))
+        return lr
 
     # %%
     args = Para()
@@ -37,7 +42,7 @@ if __name__ == '__main__':  # ! Must have this
     criterion = nn.MSELoss()
     optimizer = optim.Adam([{'params': model.conv1.parameters()},
                             {'params': model.conv2.parameters()},
-                            {'params': model.conv3.parameters(), 'lr': args.lr*0.1}],
+                            {'params': model.conv3.parameters()}],  # 'lr': args.lr*0.1
                            lr=args.lr)
     # %%
     train_dataset = TrainDataset(args.train_file)
@@ -53,6 +58,10 @@ if __name__ == '__main__':  # ! Must have this
     results = {'loss': [], 'psnr': [], 'ssim': [], 'nqm': []}
 
     for epoch in range(1, args.num_epochs+1):
+        lr = adjust_learning_rate(args, epoch-1)
+        for param_group in optimizer.param_groups:
+            param_group["lr"] = lr
+
         model.train()
         epoch_losses = AverageMeter()
 
