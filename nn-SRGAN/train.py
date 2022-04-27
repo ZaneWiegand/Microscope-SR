@@ -21,9 +21,15 @@ if __name__ == '__main__':
         upscale_factor = 2
         batch_size = 20
         num_epochs = 100
+        step = 25
+        lr = 1e-3
         num_workers = 0
         seed = 123
         # eval_original_flag = True
+
+    def adjust_learning_rate(Para, epoch):
+        lr = Para.lr*(0.1**(epoch//Para.step))
+        return lr
 
     args = Para()
     cudnn.benchmark = True
@@ -66,6 +72,13 @@ if __name__ == '__main__':
                'psnr': [], 'ssim': [], 'nqm': []}
 
     for epoch in range(1, args.num_epochs + 1):
+
+        lr = adjust_learning_rate(args, epoch-1)
+        for param_group in optimizerG.param_groups:
+            param_group["lr"] = lr
+        for param_group in optimizerD.param_groups:
+            param_group["lr"] = lr
+
         train_bar = tqdm(train_dataloader)
         running_results = {'batch_sizes': 0,
                            'd_loss': 0, 'g_loss': 0,
