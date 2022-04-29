@@ -10,7 +10,6 @@ from loss import GeneratorLoss
 import torch.optim as optim
 from utils import calc_ssim, calc_psnr, calc_nqm, AverageMeter
 import pandas as pd
-import torchvision.utils as utils
 # %%
 if __name__ == '__main__':
     class Para(object):
@@ -19,10 +18,10 @@ if __name__ == '__main__':
         out_weight_dir = './weight_output'
         # out_pic_dir = './pic_output'
         upscale_factor = 2
-        batch_size = 20
+        batch_size = 40
         num_epochs = 100
-        step = 100
-        lr = 1e-4
+        step = 40
+        lr = 1e-3
         num_workers = 0
         seed = 123
         # eval_original_flag = True
@@ -64,8 +63,8 @@ if __name__ == '__main__':
         netD.cuda()
         generator_criterion.cuda()
 
-    optimizerG = optim.Adam(netG.parameters(), lr=1e-3)
-    optimizerD = optim.Adam(netD.parameters(), lr=1e-3)
+    optimizerG = optim.Adam(netG.parameters(), lr=args.lr)
+    optimizerD = optim.Adam(netD.parameters(), lr=args.lr)
 
     results = {'d_loss': [], 'g_loss': [],
                'd_score': [], 'g_score': [],
@@ -77,7 +76,7 @@ if __name__ == '__main__':
         for param_group in optimizerG.param_groups:
             param_group["lr"] = lr
         for param_group in optimizerD.param_groups:
-            param_group["lr"] = lr
+            param_group["lr"] = lr*0.1
 
         train_bar = tqdm(train_dataloader)
         running_results = {'batch_sizes': 0,
@@ -102,10 +101,13 @@ if __name__ == '__main__':
             fake_img = fake_img.to(device)
 
             netD.zero_grad()
-            real_out = ((netD(real_img)-1)**2).mean()
-            fake_out = (netD(fake_img)**2).mean()
+            #real_out = ((netD(real_img)-1)**2).mean()
+            #fake_out = (netD(fake_img)**2).mean()
 
-            d_loss = real_out + fake_out
+            real_out = netD(real_img).mean()
+            fake_out = netD(fake_img).mean()
+
+            d_loss = 1-real_out + fake_out
             d_loss.backward(retain_graph=True)
             optimizerD.step()
 
