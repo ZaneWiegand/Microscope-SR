@@ -14,7 +14,7 @@ print("OK!")
 # *###########################################################################################
 #!############################################################################################
 #! 荧光主程序开始
-test_number = 11
+test_number = 1
 pic10x = tf.imread(
     "./Raw-Data/10X/region{}.tif".format(
         test_number
@@ -104,7 +104,7 @@ for i in range(layer):
 compare_unreg_reg(new, target, first_warp_img, global_method, 0, False)
 compare_unreg_reg(new, target, warp_img, global_method + "-PIPE", 0, False)
 plt.figure(figsize=(10, 10))
-# plt.imshow(20*np.log10(np.abs(first_warp_img - warp_img)).astype(np.uint8))
+# plt.imshow(20*np.log10(np.abs(first_warp_img - warp_img)))
 plt.imshow(np.abs(first_warp_img - warp_img))
 plt.axis("off")
 plt.show()
@@ -172,4 +172,22 @@ if False:
 # ?###########################################################################################
 # *###########################################################################################
 #!############################################################################################
+# %%
+if False:
+    def display_blocks(divide_image):
+        m, n = divide_image.shape[0], divide_image.shape[1]
+        plt.figure(figsize=(8, 6))
+        for i in range(m):
+            for j in range(n):
+                plt.subplot(m, n, i * n + j + 1)
+                plt.imshow(divide_image[i, j], vmin=0, vmax=255)
+                plt.axis("off")
+        plt.tight_layout()
+        plt.subplots_adjust(wspace=0.08, hspace=0.08)
+        plt.show()
+
+    warp_block_stack = create_image_block_stack(warp_img, 12, 12)
+    target_block_stack = create_image_block_stack(target, 12, 12)
+    display_blocks(warp_block_stack)
+    display_blocks(target_block_stack)
 # %%

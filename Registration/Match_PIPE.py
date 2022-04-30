@@ -326,7 +326,7 @@ def blocks_registration(obj_stack, ref_stack, target, method, flag=False):
     # * end
 
     if flag:
-        plt.figure(figsize=(5, 5))
+        plt.figure(figsize=(8, 6))
         step = 1
         y, x = np.mgrid[
             : r_translation_map.shape[0]: step, : r_translation_map.shape[1]: step
@@ -389,7 +389,7 @@ def blocks_registration(obj_stack, ref_stack, target, method, flag=False):
         y, x = np.mgrid[: target.shape[0]: step, : target.shape[1]: step]
         r_ = r_interpolated_translation_map[::step, ::step]
         c_ = c_interpolated_translation_map[::step, ::step]
-        plt.figure(figsize=(10, 10))
+        plt.figure(figsize=(12, 9))
         # plt.imshow(warp_img)
         plt.quiver(
             x, y, -c_, -r_, color="r", units="dots", angles="xy", scale_units="xy"
@@ -397,7 +397,7 @@ def blocks_registration(obj_stack, ref_stack, target, method, flag=False):
         # plt.title("Interpolated Vector Field")
         plt.axis("off")
         plt.show()
-        plt.figure(figsize=(10, 10))
+        plt.figure(figsize=(12, 9))
         plt.imshow(nCMM_full_map, vmin=0, vmax=1)
         # plt.title("Stitched nCMM")
         plt.axis("off")
