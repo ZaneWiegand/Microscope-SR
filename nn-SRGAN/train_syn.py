@@ -10,7 +10,6 @@ from loss import GeneratorLoss
 import torch.optim as optim
 from utils import calc_ssim, calc_psnr, calc_nqm, AverageMeter
 import pandas as pd
-import torchvision.utils as utils
 # %%
 if __name__ == '__main__':
     class Para(object):
