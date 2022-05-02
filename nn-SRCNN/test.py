@@ -11,7 +11,7 @@ if __name__ == '__main__':
     upscale_factor = 2
     plus = 1
     number = 8
-
+    print('real data:')
     for pic_number in range(number):
         lr_file = '../Data-Pre-upsample/10x_predict/10x{}.tif'.format(
             pic_number+plus)
@@ -53,7 +53,7 @@ if __name__ == '__main__':
 
         preds = preds.mul(255.0).cpu().numpy().squeeze(
             0).squeeze(0).astype(np.uint8)  # ? reason
-        tf.imsave('./pic_output/10x_out{}.tif'.format(pic_number+plus), preds)
+        tf.imwrite('./pic_output/10x_out{}.tif'.format(pic_number+plus), preds)
 
     ################################################################################################
 
@@ -61,7 +61,7 @@ if __name__ == '__main__':
     upscale_factor = 2
     plus = 1
     number = 8
-
+    print('syn data:')
     for pic_number in range(number):
         lr_file = '../Data-Pre-upsample/10x_predict/10x{}.tif'.format(
             pic_number+plus)
@@ -103,5 +103,5 @@ if __name__ == '__main__':
 
         preds = preds.mul(255.0).cpu().numpy().squeeze(
             0).squeeze(0).astype(np.uint8)  # ? reason
-        tf.imsave(
+        tf.imwrite(
             './pic_output_syn/syn_10x_out{}.tif'.format(pic_number+plus), preds)
