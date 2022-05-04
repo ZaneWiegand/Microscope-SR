@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
     ################################################################################################
 
-    weights_file = './weight_output_syn/epoch_100_xxxxxx.pth'
+    weights_file = './weight_output_syn/epoch_100_lr_0.00000010_psnr_35.72_ssim0.93_nqm22.10.pth'
     upscale_factor = 2
     plus = 1
     number = 8
