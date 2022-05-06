@@ -211,9 +211,6 @@ data_frame = pd.DataFrame(
           'Loss_G': results['g_loss'],
           'Score_D': results['d_score'],
           'Score_G': results['g_score'],
-          'PSNR': results['psnr'],
-          'SSIM': results['ssim'],
-          'NQM': results['nqm']
           }, index=range(1, epoch+1)
 )
 # %%

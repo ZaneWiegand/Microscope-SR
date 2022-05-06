@@ -122,11 +122,6 @@ if __name__ == '__main__':  # ! Must have this
 
 # %%
 data_frame = pd.DataFrame(
-    data={'Loss': results['loss'],
-          'PSNR': results['psnr'],
-          'SSIM': results['ssim'],
-          'NQM': results['nqm']
-          }, index=range(1, epoch+1)
-)
+    data={'Loss': results['loss'], }, index=range(1, epoch+1))
 # %%
 data_frame.to_csv('train_results.csv', index_label='Epoch')

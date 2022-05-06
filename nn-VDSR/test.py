@@ -7,7 +7,7 @@ import numpy as np
 from utils import calc_ssim, calc_psnr, calc_nqm
 # %%
 if __name__ == '__main__':
-    weights_file = './weight_output/epoch_100_lr_0.00010000_psnr_32.81_ssim0.91_nqm18.94.pth'
+    weights_file = './weight_output/epoch_100.pth'
     upscale_factor = 2
     plus = 1
     number = 8
@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
     ################################################################################################
 
-    weights_file = './weight_output_syn/epoch_100_xxxxxxxx.pth'
+    weights_file = './weight_output_syn/epoch_100.pth'
     upscale_factor = 2
     plus = 1
     number = 8
