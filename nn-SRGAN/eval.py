@@ -31,6 +31,7 @@ if __name__ == '__main__':  # ! Must have this
     results = {'psnr': [], 'ssim': [], 'nqm': []}
     # %%
     for epoch in range(1, args.num_epochs+1):
+        print('epoch:{}/{}'.format(epoch, args.num_epochs))
         weights_file = '{}/netG_F2_epoch_{}.pth'.format(
             args.weight_dir, epoch)
         state_dict = model.state_dict()
