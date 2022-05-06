@@ -5,6 +5,7 @@ from torch.autograd import Variable
 import numpy as np
 from copy import deepcopy
 from torch.fft import fft2, ifft2, fftshift
+from zmq import device
 # %%
 
 
@@ -75,18 +76,20 @@ def cmaskn(c, ci, a, ai, i):
     cx = deepcopy(c)
     cix = deepcopy(ci)
     cix[torch.abs(cix) > 1] = 1
-    ct = ctf(i)
+    ct = ctf(i).to(c.get_device())
     T = ct*(.86*((cx/ct)-1)+.3)
     ai[(abs(cix-cx)-T) < 0] = a[(abs(cix-cx)-T) < 0]
     return ai
 
 
 def gthresh(x, T, z):
+    T = T.to(x.get_device())
     z[torch.abs(x) < T] = 0
     return z
 
 
-def calc_nqm(sr, hr, VA):
+def calc_nqm(sr, hr, VA=np.pi/3):
+    device = sr.get_device()
     _, _, row, col = sr.shape
     X = torch.linspace(-row/2+0.5, row/2-0.5, row)
     Y = torch.linspace(-col/2+0.5, col/2-0.5, col)
@@ -112,15 +115,15 @@ def calc_nqm(sr, hr, VA):
 
     G_5 = 0.5*(1+torch.cos(pi*torch.log2(r*((r >= 16)*(r <= 64)) +
                                          4*(~((r >= 16)*(r <= 64))))-pi))
-    GS_0 = fftshift(G_0)
-    GS_1 = fftshift(G_1)
-    GS_2 = fftshift(G_2)
-    GS_3 = fftshift(G_3)
-    GS_4 = fftshift(G_4)
-    GS_5 = fftshift(G_5)
+    GS_0 = fftshift(G_0).to(device)
+    GS_1 = fftshift(G_1).to(device)
+    GS_2 = fftshift(G_2).to(device)
+    GS_3 = fftshift(G_3).to(device)
+    GS_4 = fftshift(G_4).to(device)
+    GS_5 = fftshift(G_5).to(device)
 
-    FO = fft2(sr)
-    FI = fft2(hr)
+    FO = fft2(sr).to(device)
+    FI = fft2(hr).to(device)
 
     L_0 = GS_0*FO
     LI_0 = GS_0*FI

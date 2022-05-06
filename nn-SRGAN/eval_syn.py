@@ -57,7 +57,7 @@ if __name__ == '__main__':  # ! Must have this
 
             epoch_psnr.update(calc_psnr(preds, labels), len(inputs))
             epoch_ssim.update(calc_ssim(preds, labels), len(inputs))
-            epoch_nqm.update(calc_nqm(preds, labels, 0.25), len(inputs))
+            epoch_nqm.update(calc_nqm(preds, labels), len(inputs))
 
             eval_bar.set_description(
                 desc='[LR images --> SR images] PSNR: %.4f dB SSIM: %.4f NQM: %.4f dB'
