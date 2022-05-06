@@ -60,7 +60,7 @@ if __name__ == '__main__':  # ! Must have this
             epoch_nqm.update(calc_nqm(preds, labels), len(inputs))
 
             eval_bar.set_description(
-                desc='[epoch:{}/{} LR images --> SR images] PSNR: %.4f dB SSIM: %.4f NQM: %.4f dB'
+                desc='[epoch: %.1d/%.1d LR images --> SR images] PSNR: %.4f dB SSIM: %.4f NQM: %.4f dB'
                 % (epoch, args.num_epochs, epoch_psnr.avg, epoch_ssim.avg, epoch_nqm.avg)
             )
 
