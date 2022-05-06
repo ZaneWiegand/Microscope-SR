@@ -30,7 +30,6 @@ if __name__ == '__main__':  # ! Must have this
     results = {'psnr': [], 'ssim': [], 'nqm': []}
     # %%
     for epoch in range(1, args.num_epochs+1):
-        print('epoch:{}/{}'.format(epoch, args.num_epochs))
         weights_file = '{}/epoch_{}.pth'.format(args.weight_dir, epoch)
         state_dict = model.state_dict()
         for n, p in torch.load(weights_file, map_location=lambda storage, loc: storage).items():
@@ -59,8 +58,8 @@ if __name__ == '__main__':  # ! Must have this
             epoch_nqm.update(calc_nqm(preds, labels), len(inputs))
 
             eval_bar.set_description(
-                desc='[LR images --> SR images] PSNR: %.4f dB SSIM: %.4f NQM: %.4f dB'
-                % (epoch_psnr.avg, epoch_ssim.avg, epoch_nqm.avg)
+                desc='[epoch:{}/{} LR images --> SR images] PSNR: %.4f dB SSIM: %.4f NQM: %.4f dB'
+                % (epoch, args.num_epochs, epoch_psnr.avg, epoch_ssim.avg, epoch_nqm.avg)
             )
 
         results['psnr'].append(epoch_psnr.avg.cpu().squeeze(0).item())
