@@ -12,7 +12,7 @@ from tqdm import tqdm
 if __name__ == '__main__':  # ! Must have this
 
     class Para(object):
-        eval_file = 'eval.h5'  # str
+        eval_file = 'eval_syn.h5'  # str
         weight_dir = './weight_output_syn'  # str
         num_epochs = 100  # int
         num_workers = 0  # int
