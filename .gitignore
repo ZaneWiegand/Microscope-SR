@@ -15,3 +15,6 @@ nn-SRGAN/eval_syn.h5
 nn-SRGAN/train_syn.h5
 nn-EDSR/eval_syn.h5
 nn-EDSR/train_syn.h5
+
+Data-Post-upsample
+Data-Pre-upsample
