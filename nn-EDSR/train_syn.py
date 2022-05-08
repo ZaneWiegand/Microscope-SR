@@ -105,8 +105,7 @@ if __name__ == '__main__':
             )
 
         torch.save(model.state_dict(), os.path.join(
-            args.output_dir, 'epoch_{}_lr_{:.8f}_psnr_{:.2f}_ssim{:.2f}_nqm{:.2f}.pth'.format(
-                epoch, lr, epoch_psnr.avg, epoch_ssim.avg, epoch_nqm.avg)))
+            args.output_dir, 'epoch_{}.pth'.format(epoch)))
 
         results['loss'].append(epoch_losses.avg)
         results['psnr'].append(epoch_psnr.avg.cpu().squeeze(0).item())
