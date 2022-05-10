@@ -104,8 +104,8 @@ if __name__ == '__main__':
             #real_out = ((netD(real_img)-1)**2).mean()
             #fake_out = (netD(fake_img)**2).mean()
 
-            real_out = netD(real_img).mean()
-            fake_out = netD(fake_img).mean()
+            real_out = torch.mean(netD(real_img))
+            fake_out = torch.mean(netD(fake_img))
 
             d_loss = 1-real_out + fake_out
             d_loss.backward(retain_graph=True)
