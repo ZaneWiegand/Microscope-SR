@@ -104,12 +104,12 @@ class Discriminator(nn.Module):
 
             nn.Conv2d(256, 1, kernel_size=3, padding=1, stride=1),
             nn.Sigmoid(),
-            nn.AvgPool2d(kernel_size=13, stride=1)
+            # nn.AvgPool2d(kernel_size=13, stride=1)
 
             # nn.BatchNorm2d(256),
             # nn.LeakyReLU(0.2),
 
-            # nn.AdaptiveAvgPool2d(1),
+            nn.AdaptiveAvgPool2d(1),
             # nn.Conv2d(256, 1, kernel_size=1),
             # nn.LeakyReLU(0.2),
             # nn.Conv2d(256, 1, kernel_size=1)
@@ -117,5 +117,5 @@ class Discriminator(nn.Module):
 
     def forward(self, x):
         batch_size = x.size(0)
-        return torch.sigmoid(self.net(x).view(batch_size))
+        return self.net(x).view(batch_size)
 # self.net(x)
