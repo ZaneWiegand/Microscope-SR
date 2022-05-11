@@ -76,7 +76,7 @@ if __name__ == '__main__':
         for param_group in optimizerG.param_groups:
             param_group["lr"] = lr
         for param_group in optimizerD.param_groups:
-            param_group["lr"] = args.lr*0.1
+            param_group["lr"] = args.lr*0.01
 
         train_bar = tqdm(train_dataloader)
         running_results = {'batch_sizes': 0,
