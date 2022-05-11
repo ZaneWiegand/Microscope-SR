@@ -1,18 +1,18 @@
 # %%
 import torch
 import torch.backends.cudnn as cudnn
-from models import EDSR
+from models import Generator
 import tifffile as tf
 import numpy as np
 from utils import calc_ssim, calc_psnr, calc_nqm
 import pandas as pd
 # %%
 if __name__ == '__main__':
-    weights_file = './weight_output/epoch_100.pth'
+    weights_file = './weight_output_syn/netG_F2_epoch_100.pth'
     upscale_factor = 2
     plus = 1
-    number = 42
-    print('real data:')
+    number = 8
+    print('syn data:')
     results = {'psnr': [], 'ssim': [], 'nqm': []}
     for pic_number in range(number):
         lr_file = '../Data-Post-upsample/10x_predict/10x{}.tif'.format(
@@ -21,7 +21,7 @@ if __name__ == '__main__':
             pic_number+plus)
         cudnn.benchmark = True
         device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        model = EDSR().to(device)
+        model = Generator(upscale_factor).to(device)
 
         state_dict = model.state_dict()
         for n, p in torch.load(weights_file, map_location=lambda storage, loc: storage).items():
@@ -55,7 +55,8 @@ if __name__ == '__main__':
 
         preds = preds.mul(255.0).cpu().numpy().squeeze(
             0).squeeze(0).astype(np.uint8)  # ? reason
-        tf.imwrite('./pic_output/10x_out{}.tif'.format(pic_number+plus), preds)
+        tf.imwrite(
+            './pic_output_syn/syn_10x_out{}.tif'.format(pic_number+plus), preds)
 
         results['psnr'].append(psnr)
         results['ssim'].append(ssim)
@@ -66,4 +67,4 @@ if __name__ == '__main__':
               'SSIM': results['ssim'],
               'NQM': results['nqm']
               }, index=range(1, number+1))
-    data_frame.to_csv('test_results.csv', index_label='Epoch')
+    data_frame.to_csv('test_results_syn.csv', index_label='Epoch')
