@@ -73,23 +73,25 @@ def ctf(f_r):
 
 
 def cmaskn(c, ci, a, ai, i):
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     cx = deepcopy(c)
     cix = deepcopy(ci)
     cix[torch.abs(cix) > 1] = 1
-    ct = ctf(i).to(c.get_device())
+    ct = ctf(i).to(device)
     T = ct*(.86*((cx/ct)-1)+.3)
     ai[(abs(cix-cx)-T) < 0] = a[(abs(cix-cx)-T) < 0]
     return ai
 
 
 def gthresh(x, T, z):
-    T = T.to(x.get_device())
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    T = T.to(device)
     z[torch.abs(x) < T] = 0
     return z
 
 
 def calc_nqm(sr, hr, VA=np.pi/3):
-    device = sr.get_device()
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     _, _, row, col = sr.shape
     X = torch.linspace(-row/2+0.5, row/2-0.5, row)
     Y = torch.linspace(-col/2+0.5, col/2-0.5, col)
