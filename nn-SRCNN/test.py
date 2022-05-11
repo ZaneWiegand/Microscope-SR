@@ -57,9 +57,9 @@ if __name__ == '__main__':
             0).squeeze(0).astype(np.uint8)  # ? reason
         tf.imwrite('./pic_output/10x_out{}.tif'.format(pic_number+plus), preds)
 
-        results['psnr'].append(psnr)
-        results['ssim'].append(ssim)
-        results['nqm'].append(nqm)
+        results['psnr'].append(psnr.item())
+        results['ssim'].append(ssim.item())
+        results['nqm'].append(nqm.item())
 
     data_frame = pd.DataFrame(
         data={'PSNR': results['psnr'],
