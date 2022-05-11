@@ -16,7 +16,7 @@ if __name__ == '__main__':
         train_file = 'train_syn.h5'
         eval_file = 'eval_syn.h5'
         out_weight_dir = './weight_output_syn'
-        # out_pic_dir = './pic_output_syn'
+        # out_pic_dir = './pic_output'
         upscale_factor = 2
         batch_size = 40
         num_epochs = 100
@@ -101,13 +101,14 @@ if __name__ == '__main__':
             fake_img = fake_img.to(device)
 
             netD.zero_grad()
-            #real_out = ((netD(real_img)-1)**2).mean()
-            #fake_out = (netD(fake_img)**2).mean()
+            real_out = 0.5*torch.mean((netD(real_img)-1)**2)
+            fake_out = 0.5*torch.mean(netD(fake_img)**2)
+            d_loss = real_out+fake_out
 
-            real_out = torch.mean(netD(real_img))
-            fake_out = torch.mean(netD(fake_img))
+            # real_out = torch.mean(netD(real_img))
+            # fake_out = torch.mean(netD(fake_img))
+            # d_loss = 1-real_out + fake_out
 
-            d_loss = 1-real_out + fake_out
             d_loss.backward(retain_graph=True)
             optimizerD.step()
 
@@ -115,7 +116,8 @@ if __name__ == '__main__':
             # (2) Update G network: adversarial Loss + mse loss
 
             netG.zero_grad()
-            fake_out = netD(fake_img).mean()
+            fake_out = netD(fake_img).mean(-1).mean(-1).mean(-1)
+            # print(fake_out.shape)
 
             g_loss = generator_criterion(fake_out, fake_img, real_img)
             g_loss.backward()
@@ -124,8 +126,9 @@ if __name__ == '__main__':
             # loss for current batch before optimization
             running_results['g_loss'] += g_loss.item() * batch_size
             running_results['d_loss'] += d_loss.item() * batch_size
-            running_results['d_score'] += real_out.item() * batch_size
-            running_results['g_score'] += fake_out.item() * batch_size
+            running_results['d_score'] += netD(
+                real_img).mean().item() * batch_size
+            running_results['g_score'] += fake_out.mean().item() * batch_size
 
             train_bar.set_description(desc='[%d/%d] Loss_D: %.4f Loss_G: %.4f D(x): %.4f D(G(z)): %.4f' % (
                 epoch, args.num_epochs,
@@ -211,7 +214,10 @@ data_frame = pd.DataFrame(
           'Loss_G': results['g_loss'],
           'Score_D': results['d_score'],
           'Score_G': results['g_score'],
+          'psnr': results['psnr'],
+          'ssim': results['ssim'],
+          'nqm': results['nqm'],
           }, index=range(1, epoch+1)
 )
 # %%
-data_frame.to_csv('train_results_syn.csv', index_label='Epoch')
+data_frame.to_csv('train_results.csv', index_label='Epoch')
