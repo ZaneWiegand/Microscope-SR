@@ -20,14 +20,14 @@ if __name__ == '__main__':
         upscale_factor = 2
         batch_size = 40
         num_epochs = 100
-        step = 50
+        step = 25
         lr = 1e-3
         num_workers = 0
         seed = 123
         # eval_original_flag = True
 
     def adjust_learning_rate(Para, epoch):
-        lr = Para.lr*(0.1**(epoch//Para.step))
+        lr = Para.lr*(0.5**(epoch//Para.step))
         return lr
 
     args = Para()
