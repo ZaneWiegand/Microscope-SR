@@ -6,7 +6,7 @@ import matplotlib.patches as patches
 
 print("OK!")
 # %%
-test_number = 11
+test_number = 10
 pic1 = tf.imread(
     "./Raw-Data/10X/region{}.tif".format(
         test_number
@@ -53,4 +53,7 @@ pic2_new = pic1_new[min_loc[0]: min_loc[0] +
                     pic2_a, min_loc[1]: min_loc[1] + pic2_b]
 # %%
 plt.imshow(pic2_new, cmap="gray")
+# %%
+tf.imwrite('10x10.tif', pic2_new)
+tf.imwrite('20x10.tif', pic2)
 # %%
