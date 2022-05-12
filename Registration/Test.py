@@ -84,7 +84,7 @@ for i in range(layer):
         warp_block_stack = create_image_block_stack(
             warp_img, block_row, block_col)
         warp_img, rmax_shift, cmax_shift, rtmap, ctmap = blocks_registration(
-            warp_block_stack, target_block_stack, target, method, True
+            warp_block_stack, target_block_stack, target, method, False
         )
         print("第{}层位移: (r = {}, c = {})".format(i + 1, rmax_shift, cmax_shift))
         count += 1
