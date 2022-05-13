@@ -14,7 +14,7 @@ print("OK!")
 # *###########################################################################################
 #!############################################################################################
 #! 荧光主程序开始
-test_number = 11
+test_number = 1
 pic10x = tf.imread(
     "./Raw-Data/10X/region{}.tif".format(
         test_number
@@ -84,7 +84,7 @@ for i in range(layer):
         warp_block_stack = create_image_block_stack(
             warp_img, block_row, block_col)
         warp_img, rmax_shift, cmax_shift, rtmap, ctmap = blocks_registration(
-            warp_block_stack, target_block_stack, target, method, False
+            warp_block_stack, target_block_stack, target, method, True
         )
         print("第{}层位移: (r = {}, c = {})".format(i + 1, rmax_shift, cmax_shift))
         count += 1

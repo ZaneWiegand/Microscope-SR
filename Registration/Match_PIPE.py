@@ -398,7 +398,7 @@ def blocks_registration(obj_stack, ref_stack, target, method, flag=False):
         plt.axis("off")
         plt.show()
         plt.figure(figsize=(12, 9))
-        plt.imshow(nCMM_full_map, vmin=0, vmax=1)
+        plt.imshow(nCMM_full_map, vmin=0, vmax=1, cmap="gray")
         # plt.title("Stitched nCMM")
         plt.axis("off")
         plt.show()
