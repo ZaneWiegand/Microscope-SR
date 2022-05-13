@@ -220,4 +220,4 @@ data_frame = pd.DataFrame(
           }, index=range(1, epoch+1)
 )
 # %%
-data_frame.to_csv('train_results.csv', index_label='Epoch')
+data_frame.to_csv('train_results_syn.csv', index_label='Epoch')
