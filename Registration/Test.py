@@ -14,7 +14,7 @@ print("OK!")
 # *###########################################################################################
 #!############################################################################################
 #! 荧光主程序开始
-test_number = 1
+test_number = 11
 pic10x = tf.imread(
     "./Raw-Data/10X/region{}.tif".format(
         test_number
@@ -53,7 +53,7 @@ new = pic10x_ex_cut
 target = pic20x
 # %%
 # * method = "SIFT","ORB","KAZE","AKAZE","BRISK","nCCM"
-global_method = "SIFT"
+global_method = "KAZE"
 warp_img = global_registration(new, target, global_method, True)
 first_warp_img = warp_img
 # %%
@@ -84,7 +84,7 @@ for i in range(layer):
         warp_block_stack = create_image_block_stack(
             warp_img, block_row, block_col)
         warp_img, rmax_shift, cmax_shift, rtmap, ctmap = blocks_registration(
-            warp_block_stack, target_block_stack, target, method, True
+            warp_block_stack, target_block_stack, target, method, False
         )
         print("第{}层位移: (r = {}, c = {})".format(i + 1, rmax_shift, cmax_shift))
         count += 1
@@ -143,7 +143,7 @@ for j, n in tup:
         )
 
 # %%
-if False:
+if True:
     if method == cv.INTER_CUBIC:
         methods = "CUBIC"
     elif method == cv.INTER_LINEAR:
