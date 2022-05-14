@@ -536,7 +536,7 @@ def calculate_NMI(target, warp):
     hxy /= 1.0 * size
     hxy = -np.sum(hxy * np.log(hxy + 1e-8))
 
-    NMI = (hx + hy) / hxy
+    NMI = 2*(hx+hy-hxy)/(hx + hy)
     return NMI
 
 
