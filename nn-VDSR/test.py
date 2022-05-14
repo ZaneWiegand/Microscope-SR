@@ -8,7 +8,7 @@ from utils import calc_ssim, calc_psnr, calc_nqm
 import pandas as pd
 # %%
 if __name__ == '__main__':
-    weights_file = './weight_output/epoch_100.pth'
+    weights_file = './weight_output/epoch_33.pth'
     upscale_factor = 2
     plus = 1
     number = 84
