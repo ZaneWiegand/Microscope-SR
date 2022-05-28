@@ -14,7 +14,7 @@ print("OK!")
 # *###########################################################################################
 #!############################################################################################
 #! 荧光主程序开始
-test_number = 1
+test_number = 11
 pic10x = tf.imread(
     "./Raw-Data/10X/region{}.tif".format(
         test_number
@@ -53,7 +53,7 @@ new = pic10x_ex_cut
 target = pic20x
 # %%
 # * method = "SIFT","ORB","KAZE","AKAZE","BRISK","nCCM"
-global_method = "KAZE"
+global_method = "ORB"
 warp_img = global_registration(new, target, global_method, True)
 first_warp_img = warp_img
 # %%
@@ -62,7 +62,7 @@ block_col_ini = block_col = 1
 target_block_stack = create_image_block_stack(target, block_row, block_col)
 # display_blocks(target_block_stack)
 # %%
-threshold = 0.25
+threshold = 1
 layer = 16
 layer_state = np.ones(layer)
 warp_img_layer = np.zeros([warp_img.shape[0], warp_img.shape[1], layer])
